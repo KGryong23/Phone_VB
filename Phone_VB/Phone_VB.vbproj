@@ -74,11 +74,13 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\Dtos\BrandDto.vb" />
     <Compile Include="Classes\Dtos\CreatePhoneRequest.vb" />
     <Compile Include="Classes\Dtos\LoginRequest.vb" />
     <Compile Include="Classes\Dtos\PhoneDto.vb" />
     <Compile Include="Classes\Dtos\UpdatePhoneRequest.vb" />
+    <Compile Include="Classes\Dtos\UserDto.vb" />
     <Compile Include="Classes\Repositories\BrandRepository.vb" />
     <Compile Include="Classes\Repositories\IBrandRepository.vb" />
     <Compile Include="Classes\Repositories\IPhoneRepository.vb" />
@@ -91,6 +93,12 @@
     <Compile Include="Classes\Services\IUserService.vb" />
     <Compile Include="Classes\Services\PhoneService.vb" />
     <Compile Include="Classes\Services\UserService.vb" />
+    <Compile Include="Forms\LoginForm.Designer.vb">
+      <DependentUpon>LoginForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LoginForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\PhoneForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -124,9 +132,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Program.vb" />
+    <Compile Include="Utilities\CurrentUser.vb" />
     <Compile Include="Utilities\PagingModels.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\LoginForm.resx">
+      <DependentUpon>LoginForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PhoneForm.resx">
       <DependentUpon>PhoneForm.vb</DependentUpon>
     </EmbeddedResource>

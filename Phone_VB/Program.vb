@@ -27,7 +27,7 @@ Module Program
         ' Kiểm tra kết nối cơ sở dữ liệu trước khi chạy ứng dụng
         If TestConnection() Then
             ' Nếu kết nối thành công, chạy form chính
-            Application.Run(New PhoneForm())
+            Application.Run(New LoginForm())
         Else
             ' Nếu kết nối thất bại, thoát ứng dụng
             Application.Exit()

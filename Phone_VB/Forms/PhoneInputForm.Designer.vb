@@ -38,17 +38,17 @@ Partial Class PhoneInputForm
         '
         Me.lblModel.AutoSize = True
         Me.lblModel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.lblModel.Location = New System.Drawing.Point(157, 92)
+        Me.lblModel.Location = New System.Drawing.Point(144, 89)
         Me.lblModel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblModel.Name = "lblModel"
-        Me.lblModel.Size = New System.Drawing.Size(86, 15)
+        Me.lblModel.Size = New System.Drawing.Size(102, 18)
         Me.lblModel.TabIndex = 0
         Me.lblModel.Text = "Tên sản phẩm"
         '
         'txtModel
         '
         Me.txtModel.Location = New System.Drawing.Point(251, 82)
-        Me.txtModel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtModel.Margin = New System.Windows.Forms.Padding(4)
         Me.txtModel.Multiline = True
         Me.txtModel.Name = "txtModel"
         Me.txtModel.Size = New System.Drawing.Size(180, 25)
@@ -57,9 +57,9 @@ Partial Class PhoneInputForm
         'lblPrice
         '
         Me.lblPrice.AutoSize = True
-        Me.lblPrice.Location = New System.Drawing.Point(157, 141)
+        Me.lblPrice.Location = New System.Drawing.Point(144, 138)
         Me.lblPrice.Name = "lblPrice"
-        Me.lblPrice.Size = New System.Drawing.Size(26, 15)
+        Me.lblPrice.Size = New System.Drawing.Size(31, 18)
         Me.lblPrice.TabIndex = 2
         Me.lblPrice.Text = "Giá"
         '
@@ -82,9 +82,9 @@ Partial Class PhoneInputForm
         'lblStock
         '
         Me.lblStock.AutoSize = True
-        Me.lblStock.Location = New System.Drawing.Point(157, 190)
+        Me.lblStock.Location = New System.Drawing.Point(144, 187)
         Me.lblStock.Name = "lblStock"
-        Me.lblStock.Size = New System.Drawing.Size(51, 15)
+        Me.lblStock.Size = New System.Drawing.Size(63, 18)
         Me.lblStock.TabIndex = 5
         Me.lblStock.Text = "Tồn kho"
         '
@@ -93,15 +93,15 @@ Partial Class PhoneInputForm
         Me.cboBrand.FormattingEnabled = True
         Me.cboBrand.Location = New System.Drawing.Point(251, 229)
         Me.cboBrand.Name = "cboBrand"
-        Me.cboBrand.Size = New System.Drawing.Size(180, 23)
+        Me.cboBrand.Size = New System.Drawing.Size(180, 26)
         Me.cboBrand.TabIndex = 6
         '
         'lblBrand
         '
         Me.lblBrand.AutoSize = True
-        Me.lblBrand.Location = New System.Drawing.Point(157, 237)
+        Me.lblBrand.Location = New System.Drawing.Point(144, 237)
         Me.lblBrand.Name = "lblBrand"
-        Me.lblBrand.Size = New System.Drawing.Size(76, 15)
+        Me.lblBrand.Size = New System.Drawing.Size(89, 18)
         Me.lblBrand.TabIndex = 8
         Me.lblBrand.Text = "Thương hiệu"
         '
@@ -125,7 +125,7 @@ Partial Class PhoneInputForm
         '
         'PhoneInputForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(653, 401)
         Me.Controls.Add(Me.btnCancel)
@@ -139,7 +139,7 @@ Partial Class PhoneInputForm
         Me.Controls.Add(Me.txtModel)
         Me.Controls.Add(Me.lblModel)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "PhoneInputForm"
         Me.Text = "PhoneInputForm"
         Me.ResumeLayout(False)

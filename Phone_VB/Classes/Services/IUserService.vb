@@ -1,3 +1,3 @@
 ﻿Public Interface IUserService
-    Function CheckLogin(request As LoginRequest) As Boolean
+    Function CheckLogin(request As LoginRequest) As UserDto
 End Interface

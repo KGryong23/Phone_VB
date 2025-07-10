@@ -8,8 +8,20 @@
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             ' Khởi tạo cboQuantity
-            cboQuantity.Items.AddRange(New Object() {5, 10, 15, 25})
-            cboQuantity.SelectedIndex = 0 ' Mặc định chọn 5
+            cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(5, "5 bản ghi"))
+            cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(10, "10 bản ghi"))
+            cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(15, "15 bản ghi"))
+            cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(25, "25 bản ghi"))
+
+            cboQuantity.DisplayMember = "Value"
+            cboQuantity.ValueMember = "Key"
+            cboQuantity.SelectedIndex = 0
+
+            If Not CurrentUser.IsAdmin Then
+                btnCreate.Visible = False
+                btnUpdate.Visible = False
+                btnDelete.Visible = False
+            End If
 
             ' Tải danh sách điện thoại
             LoadPhones()
@@ -102,8 +114,14 @@
 
     Private Sub cboQuantity_SelectedChanged(sender As Object, e As EventArgs) Handles cboQuantity.SelectedValueChanged
         Try
-            If cboQuantity.SelectedIndex >= 0 Then
-                pageSize = Convert.ToInt32(cboQuantity.SelectedItem)
+            Dim quantity As Integer = 5 ' Mặc định
+
+            Dim selectedItem = DirectCast(cboQuantity.SelectedItem, KeyValuePair(Of Integer, String)?)
+            If selectedItem.HasValue Then
+                quantity = selectedItem.Value.Key
+            End If
+            If quantity >= 0 Then
+                pageSize = Convert.ToInt32(quantity)
                 currentPage = 1 ' Reset về trang đầu khi thay đổi pageSize
                 LoadPhones()
             End If

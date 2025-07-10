@@ -41,20 +41,14 @@ Public Class PhoneRepository
     Public Function Add(phone As Phone) As Phone Implements IPhoneRepository.Add
         Using conn As New OdbcConnection(connStr)
             conn.Open()
-            Dim query As String = "INSERT INTO phones (model, price, stock, brand_id, created_at, last_modified) VALUES (?, ?, ?, ?, ?, ?)"
+            Dim escapedModel As String = phone.Model.Replace("'", "''")
+            Dim query As String = String.Format("CALL upsert_phone(0, '{0}', {1}, {2}, {3})",
+                    escapedModel, phone.Price.ToString("F2", Globalization.CultureInfo.InvariantCulture),
+                    phone.Stock, phone.BrandId)
             Using cmd As New OdbcCommand(query, conn)
-                Dim now As DateTime = DateTime.Now
-                ' Explicitly specify parameter types to avoid binding issues
-                cmd.Parameters.AddWithValue("", phone.Model)
-                cmd.Parameters.AddWithValue("", phone.Price)
-                cmd.Parameters.AddWithValue("", phone.Stock)
-                cmd.Parameters.AddWithValue("", phone.BrandId)
-                cmd.Parameters.AddWithValue("", now)
-                cmd.Parameters.AddWithValue("", now)
-                ' Thực thi câu lệnh INSERT
+                Debug.WriteLine("Add: Query=" & query)
                 cmd.ExecuteNonQuery()
 
-                ' Retrieve the last inserted ID
                 Dim idQuery As String = "SELECT LAST_INSERT_ID()"
                 Using idCmd As New OdbcCommand(idQuery, conn)
                     phone.Id = Convert.ToInt32(idCmd.ExecuteScalar())
@@ -67,16 +61,17 @@ Public Class PhoneRepository
     Public Function Update(phone As Phone) As Phone Implements IPhoneRepository.Update
         Using conn As New OdbcConnection(connStr)
             conn.Open()
-            Dim query As String = "UPDATE phones SET model = ?, price = ?, stock = ?, brand_id = ?, last_modified = ? WHERE id = ?"
+            Dim escapedModel As String = phone.Model.Replace("'", "''")
+            Dim query As String = String.Format("CALL upsert_phone({0}, '{1}', {2}, {3}, {4})",
+                phone.Id, escapedModel,
+                phone.Price.ToString("F2", Globalization.CultureInfo.InvariantCulture),
+                phone.Stock, phone.BrandId)
             Using cmd As New OdbcCommand(query, conn)
-                Dim now As DateTime = DateTime.Now
-                cmd.Parameters.AddWithValue("", phone.Model)
-                cmd.Parameters.AddWithValue("", phone.Price)
-                cmd.Parameters.AddWithValue("", phone.Stock)
-                cmd.Parameters.AddWithValue("", phone.BrandId)
-                cmd.Parameters.AddWithValue("", now)
-                cmd.Parameters.AddWithValue("", phone.Id)
-                cmd.ExecuteNonQuery()
+                Debug.WriteLine("Update: Query=" & query)
+                Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+                If rowsAffected = 0 Then
+                    Throw New Exception("No phone found with ID " & phone.Id)
+                End If
             End Using
         End Using
         Return phone
