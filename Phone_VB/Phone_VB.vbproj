@@ -168,6 +168,8 @@
   <ItemGroup>
     <Content Include="Sql\phone.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FunctionalDesign\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
