@@ -13,6 +13,7 @@ CREATE TABLE phones (
     brand_id INT DEFAULT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     FOREIGN KEY (brand_id) REFERENCES brands(id)
 );
 
@@ -24,6 +25,24 @@ CREATE TABLE users (
     created_at DATETIME NOT NULL,
     last_modified DATETIME NOT NULL
 );
+
+CREATE TABLE stock_transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    phone_id INT NOT NULL,
+    user_id INT NOT NULL,              -- người yêu cầu nhập/xuất
+    approved_by INT DEFAULT NULL,      -- người duyệt (có thể là admin)
+    quantity INT NOT NULL,
+    transaction_type ENUM('import', 'export') NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    note TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approved_at DATETIME DEFAULT NULL,
+
+    FOREIGN KEY (phone_id) REFERENCES phones(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+);
+
 
 INSERT INTO brands (name, created_at, last_modified)
 VALUES
