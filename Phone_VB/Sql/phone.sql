@@ -23,14 +23,12 @@ CREATE TABLE roles (
     description VARCHAR(255)
 );
 
--- 2. Bảng permissions
 CREATE TABLE permissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     description VARCHAR(255)
 );
 
--- 3. Bảng role_permissions (nhiều-nhiều)
 CREATE TABLE role_permissions (
     role_id INT NOT NULL,
     permission_id INT NOT NULL,
@@ -39,7 +37,6 @@ CREATE TABLE role_permissions (
     FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
 );
 
--- 4. Bảng users (tham chiếu đến role_id)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
