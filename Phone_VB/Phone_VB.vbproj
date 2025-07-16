@@ -93,22 +93,27 @@
     <Compile Include="Classes\Services\IUserService.vb" />
     <Compile Include="Classes\Services\PhoneService.vb" />
     <Compile Include="Classes\Services\UserService.vb" />
+    <Compile Include="Classes\Models\Brand.vb" />
+    <Compile Include="Classes\Models\Phone.vb" />
+    <Compile Include="Classes\Models\User.vb" />
+    <Compile Include="Forms\HomeForm.Designer.vb">
+      <DependentUpon>HomeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HomeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\LoginForm.Designer.vb">
       <DependentUpon>LoginForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\LoginForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\PhoneForm.Designer.vb">
+      <DependentUpon>PhoneForm.vb</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PhoneForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PhoneForm.Designer.vb">
-      <DependentUpon>PhoneForm.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Classes\Models\Brand.vb" />
-    <Compile Include="Classes\Models\Phone.vb" />
-    <Compile Include="Classes\Models\User.vb" />
     <Compile Include="Forms\PhoneInputForm.Designer.vb">
       <DependentUpon>PhoneInputForm.vb</DependentUpon>
     </Compile>
@@ -136,6 +141,9 @@
     <Compile Include="Utilities\PagingModels.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\HomeForm.resx">
+      <DependentUpon>HomeForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.vb</DependentUpon>
     </EmbeddedResource>

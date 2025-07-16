@@ -31,7 +31,7 @@
             ' Mở PhoneForm trực tiếp
             Using homeForm As New HomeForm()
                 Hide()
-                PhoneForm.ShowDialog()
+                homeForm.ShowDialog()
                 Close()
             End Using
         Catch ex As Exception
