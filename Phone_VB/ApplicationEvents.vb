@@ -20,7 +20,7 @@ Namespace My
                 e.Cancel = True
             End If
         End Sub
-
+        ' hahahahahaha
         ' Hàm kiểm tra kết nối cơ sở dữ liệu
         Private Function TestConnection() As Boolean
             Try
