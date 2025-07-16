@@ -1,15 +1,8 @@
 ﻿Public Class LoginForm
     Inherits Form
 
-    Private ReadOnly userService As IUserService = New UserService(New UserRepository())
-
     Public Sub New()
         InitializeComponent()
-        Text = "Đăng nhập"
-        FormBorderStyle = FormBorderStyle.FixedDialog
-        MaximizeBox = False
-        MinimizeBox = False
-        StartPosition = FormStartPosition.CenterScreen
     End Sub
 
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
@@ -26,19 +19,19 @@
                 Return
             End If
 
-            Dim user As UserDto = userService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
+            Dim user As UserDto = ServiceRegistry.UserService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
             If user.Username Is Nothing Then
                 MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
             ' Lưu thông tin người dùng hiện tại
-            CurrentUser.SetUser(user.Id, user.Username, user.Role)
+            'CurrentUser.SetUser(user.Id, user.Username, user.Role)
 
             ' Mở PhoneForm trực tiếp
-            Using phoneForm As New PhoneForm()
+            Using homeForm As New HomeForm()
                 Hide()
-                phoneForm.ShowDialog()
+                PhoneForm.ShowDialog()
                 Close()
             End Using
         Catch ex As Exception

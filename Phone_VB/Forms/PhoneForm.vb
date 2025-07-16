@@ -1,6 +1,4 @@
 ﻿Public Class PhoneForm
-    Private phoneService As IPhoneService = New PhoneService(New PhoneRepository(), New BrandRepository())
-    Private brandService As IBrandService = New BrandService(New BrandRepository())
     Private currentPage As Integer = 1
     Private pageSize As Integer = 5
     Private totalRecords As Integer = 0
@@ -17,11 +15,11 @@
             cboQuantity.ValueMember = "Key"
             cboQuantity.SelectedIndex = 0
 
-            If Not CurrentUser.IsAdmin Then
-                btnCreate.Visible = False
-                btnUpdate.Visible = False
-                btnDelete.Visible = False
-            End If
+            'If Not CurrentUser.IsAdmin Then
+            '    btnCreate.Visible = False
+            '    btnUpdate.Visible = False
+            '    btnDelete.Visible = False
+            'End If
 
             ' Tải danh sách điện thoại
             LoadPhones()
@@ -42,7 +40,7 @@
                 Throw New Exception("Invalid phone selected")
             End If
             If MessageBox.Show("Are you sure you want to delete this phone?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                phoneService.Delete(phoneDto.Id)
+                ServiceContainer.PhoneService.Delete(phoneDto.Id)
                 MessageBox.Show("Phone deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 LoadPhones()
             End If
@@ -94,7 +92,7 @@
         Dim worker As New ComponentModel.BackgroundWorker()
         AddHandler worker.DoWork, Sub(sender, e)
                                       Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
-                                      e.Result = phoneService.GetPaged(query)
+                                      e.Result = ServiceContainer.PhoneService.GetPaged(query)
                                   End Sub
         AddHandler worker.RunWorkerCompleted, Sub(sender, e)
                                                   If e.Error IsNot Nothing Then
@@ -156,7 +154,7 @@
 
     Private Sub btnCreate_Click(sender As Object, e As EventArgs) Handles btnCreate.Click
         Try
-            Dim inputForm As New PhoneInputForm(phoneService, brandService)
+            Dim inputForm As New PhoneInputForm()
             If inputForm.ShowDialog() = DialogResult.OK Then
                 LoadPhones()
             End If
@@ -176,7 +174,7 @@
             If phoneDto Is Nothing Then
                 Throw New Exception("Invalid phone selected")
             End If
-            Dim inputForm As New PhoneInputForm(phoneService, brandService, phoneDto)
+            Dim inputForm As New PhoneInputForm(phoneDto)
             If inputForm.ShowDialog() = DialogResult.OK Then
                 LoadPhones()
             End If

@@ -1,14 +1,10 @@
 ﻿Public Class PhoneInputForm
     Inherits Form
 
-    Private phoneService As IPhoneService
-    Private brandService As IBrandService
     Private phoneId As Integer? ' Null cho Create, có giá trị cho Update
 
-    Public Sub New(phoneService As IPhoneService, brandService As IBrandService, Optional phoneDto As PhoneDto = Nothing)
+    Public Sub New(Optional phoneDto As PhoneDto = Nothing)
         InitializeComponent()
-        Me.phoneService = phoneService
-        Me.brandService = brandService
         phoneId = If(phoneDto IsNot Nothing, phoneDto.Id, Nothing)
         Text = If(phoneId.HasValue AndAlso phoneId.Value <> 0, "Cập nhật điện thoại", "Thêm điện thoại mới")
         FormBorderStyle = FormBorderStyle.FixedDialog
@@ -22,7 +18,7 @@
     End Sub
 
     Private Sub LoadBrands()
-        cboBrand.DataSource = brandService.GetAll()
+        cboBrand.DataSource = ServiceContainer.BrandService.GetAll()
         cboBrand.DisplayMember = "Name"
         cboBrand.ValueMember = "Id"
         If cboBrand.Items.Count > 0 Then
@@ -34,7 +30,7 @@
         txtModel.Text = phoneDto.Model
         txtPrice.Text = phoneDto.Price.ToString()
         txtStock.Text = phoneDto.Stock.ToString()
-        Dim brand As BrandDto = brandService.GetAll().FirstOrDefault(Function(b) b.Name = phoneDto.BrandName)
+        Dim brand As BrandDto = ServiceContainer.BrandService.GetAll().FirstOrDefault(Function(b) b.Name = phoneDto.BrandName)
         If brand IsNot Nothing Then
             cboBrand.SelectedValue = brand.Id
         End If
@@ -60,7 +56,7 @@
                 .Stock = Convert.ToInt32(txtStock.Text),
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
-            phoneService.Update(request)
+            ServiceContainer.PhoneService.Update(request)
         Else
             ' Create
             Dim request As New CreatePhoneRequest With {
@@ -69,7 +65,7 @@
                 .Stock = Convert.ToInt32(txtStock.Text),
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
-            phoneService.Add(request)
+            ServiceContainer.PhoneService.Add(request)
         End If
         DialogResult = DialogResult.OK
         Close()

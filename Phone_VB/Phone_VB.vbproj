@@ -131,7 +131,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Program.vb" />
+    <Compile Include="ServiceRegistry.vb" />
     <Compile Include="Utilities\CurrentUser.vb" />
     <Compile Include="Utilities\PagingModels.vb" />
   </ItemGroup>

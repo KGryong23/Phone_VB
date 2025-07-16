@@ -17,14 +17,39 @@ CREATE TABLE phones (
     FOREIGN KEY (brand_id) REFERENCES brands(id)
 );
 
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
+-- 2. Bảng permissions
+CREATE TABLE permissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(255)
+);
+
+-- 3. Bảng role_permissions (nhiều-nhiều)
+CREATE TABLE role_permissions (
+    role_id INT NOT NULL,
+    permission_id INT NOT NULL,
+    PRIMARY KEY (role_id, permission_id),
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+);
+
+-- 4. Bảng users (tham chiếu đến role_id)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
+    role_id INT NOT NULL,
     created_at DATETIME NOT NULL,
-    last_modified DATETIME NOT NULL
+    last_modified DATETIME NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT
 );
+
 
 CREATE TABLE stock_transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,14 +88,16 @@ VALUES
 ('Poco X5 Pro', 299.99, 80, 3, NOW(), NOW()),
 ('Mi 11 Ultra', 749.99, 10, 3, NOW(), NOW());
 
-INSERT INTO users (username, password, role, created_at, last_modified)
-VALUES
-('elite', 'hashpassword', 'admin', NOW(), NOW()),
-('elite23', 'hashpassword', 'user', NOW(), NOW());
+INSERT INTO roles (name, description) VALUES ('admin', 'hihihihihi');
+INSERT INTO roles (name, description) VALUES ('user', 'hahahahaha');
 
-INSERT INTO phones (model, price, stock, brand_id, created_at, last_modified)
-VALUES
-('iPhone 15', 999.99, 50, 1, NOW(), NOW());
+INSERT INTO users (username, password, role_id, created_at, last_modified)
+VALUES 
+-- Admin user
+('elite', 'hashed', 1, NOW(), NOW()),
+
+-- Normal user
+('sync', 'hashed', 2, NOW(), NOW());
 
 CREATE PROCEDURE upsert_phone (
     IN p_id INT,
@@ -95,7 +122,5 @@ BEGIN
             last_modified = CURRENT_TIMESTAMP
         WHERE id = p_id;
     END IF;
-END 
+END; 
 
-CALL upsert_phone(NULL, 'iPhone 22', 999.99, 10, 1);
-CALL upsert_phone(5, 'Samsung S24 Ultra', 899.00, 8, 2);
