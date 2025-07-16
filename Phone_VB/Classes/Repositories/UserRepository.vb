@@ -28,7 +28,7 @@ Public Class UserRepository
         user.Id = reader.GetInt32(reader.GetOrdinal("id"))
         user.Username = reader.GetString(reader.GetOrdinal("username"))
         user.Password = reader.GetString(reader.GetOrdinal("password"))
-        user.Role = reader.GetString(reader.GetOrdinal("role"))
+        user.RoleId = reader.GetString(reader.GetOrdinal("role_id"))
         user.CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at"))
         user.LastModified = reader.GetDateTime(reader.GetOrdinal("last_modified"))
         Return user

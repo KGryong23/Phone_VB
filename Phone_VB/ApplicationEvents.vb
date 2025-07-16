@@ -10,7 +10,6 @@ Namespace My
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub MyApplication_Startup(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-
             ' Kiểm tra kết nối cơ sở dữ liệu
             If TestConnection() Then
                 ServiceRegistry.InitializeServices()

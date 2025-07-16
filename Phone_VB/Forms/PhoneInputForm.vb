@@ -18,7 +18,7 @@
     End Sub
 
     Private Sub LoadBrands()
-        cboBrand.DataSource = ServiceContainer.BrandService.GetAll()
+        cboBrand.DataSource = ServiceRegistry.BrandService.GetAll()
         cboBrand.DisplayMember = "Name"
         cboBrand.ValueMember = "Id"
         If cboBrand.Items.Count > 0 Then
@@ -30,7 +30,7 @@
         txtModel.Text = phoneDto.Model
         txtPrice.Text = phoneDto.Price.ToString()
         txtStock.Text = phoneDto.Stock.ToString()
-        Dim brand As BrandDto = ServiceContainer.BrandService.GetAll().FirstOrDefault(Function(b) b.Name = phoneDto.BrandName)
+        Dim brand As BrandDto = ServiceRegistry.BrandService.GetAll().FirstOrDefault(Function(b) b.Name = phoneDto.BrandName)
         If brand IsNot Nothing Then
             cboBrand.SelectedValue = brand.Id
         End If
@@ -56,7 +56,7 @@
                 .Stock = Convert.ToInt32(txtStock.Text),
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
-            ServiceContainer.PhoneService.Update(request)
+            ServiceRegistry.PhoneService.Update(request)
         Else
             ' Create
             Dim request As New CreatePhoneRequest With {
@@ -65,7 +65,7 @@
                 .Stock = Convert.ToInt32(txtStock.Text),
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
-            ServiceContainer.PhoneService.Add(request)
+            ServiceRegistry.PhoneService.Add(request)
         End If
         DialogResult = DialogResult.OK
         Close()

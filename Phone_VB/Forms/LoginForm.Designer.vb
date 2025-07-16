@@ -32,62 +32,69 @@ Partial Class LoginForm
         'lblUsername
         '
         Me.lblUsername.AutoSize = True
-        Me.lblUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.lblUsername.Location = New System.Drawing.Point(135, 109)
+        Me.lblUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.lblUsername.Location = New System.Drawing.Point(27, 87)
+        Me.lblUsername.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblUsername.Name = "lblUsername"
-        Me.lblUsername.Size = New System.Drawing.Size(105, 18)
+        Me.lblUsername.Size = New System.Drawing.Size(113, 17)
         Me.lblUsername.TabIndex = 0
-        Me.lblUsername.Text = "Tên đăng nhập"
+        Me.lblUsername.Text = "Tên đăng nhập :"
         '
         'txtUsername
         '
-        Me.txtUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.txtUsername.Location = New System.Drawing.Point(259, 93)
+        Me.txtUsername.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!)
+        Me.txtUsername.Location = New System.Drawing.Point(156, 76)
+        Me.txtUsername.Margin = New System.Windows.Forms.Padding(2)
         Me.txtUsername.Multiline = True
         Me.txtUsername.Name = "txtUsername"
-        Me.txtUsername.Size = New System.Drawing.Size(203, 34)
+        Me.txtUsername.Size = New System.Drawing.Size(153, 28)
         Me.txtUsername.TabIndex = 1
         '
         'lblPassword
         '
         Me.lblPassword.AutoSize = True
-        Me.lblPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.lblPassword.Location = New System.Drawing.Point(135, 173)
+        Me.lblPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.lblPassword.Location = New System.Drawing.Point(66, 141)
+        Me.lblPassword.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblPassword.Name = "lblPassword"
-        Me.lblPassword.Size = New System.Drawing.Size(69, 18)
+        Me.lblPassword.Size = New System.Drawing.Size(74, 17)
         Me.lblPassword.TabIndex = 2
-        Me.lblPassword.Text = "Mật khẩu"
+        Me.lblPassword.Text = "Mật khẩu :"
         '
         'txtPassword
         '
-        Me.txtPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
-        Me.txtPassword.Location = New System.Drawing.Point(259, 161)
+        Me.txtPassword.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!)
+        Me.txtPassword.Location = New System.Drawing.Point(156, 131)
+        Me.txtPassword.Margin = New System.Windows.Forms.Padding(2)
         Me.txtPassword.Multiline = True
         Me.txtPassword.Name = "txtPassword"
         Me.txtPassword.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txtPassword.Size = New System.Drawing.Size(203, 32)
+        Me.txtPassword.Size = New System.Drawing.Size(153, 27)
         Me.txtPassword.TabIndex = 3
         '
         'btnLogin
         '
-        Me.btnLogin.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.btnLogin.Location = New System.Drawing.Point(259, 246)
+        Me.btnLogin.BackColor = System.Drawing.SystemColors.Highlight
+        Me.btnLogin.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.btnLogin.Location = New System.Drawing.Point(156, 183)
+        Me.btnLogin.Margin = New System.Windows.Forms.Padding(2)
         Me.btnLogin.Name = "btnLogin"
-        Me.btnLogin.Size = New System.Drawing.Size(122, 38)
+        Me.btnLogin.Size = New System.Drawing.Size(102, 39)
         Me.btnLogin.TabIndex = 4
         Me.btnLogin.Text = "Đăng nhập"
-        Me.btnLogin.UseVisualStyleBackColor = True
+        Me.btnLogin.UseVisualStyleBackColor = False
         '
         'LoginForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(692, 421)
+        Me.ClientSize = New System.Drawing.Size(400, 319)
         Me.Controls.Add(Me.btnLogin)
         Me.Controls.Add(Me.txtPassword)
         Me.Controls.Add(Me.lblPassword)
         Me.Controls.Add(Me.txtUsername)
         Me.Controls.Add(Me.lblUsername)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "LoginForm"
         Me.Text = "Đăng nhập"
         Me.ResumeLayout(False)

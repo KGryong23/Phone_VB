@@ -40,7 +40,7 @@
                 Throw New Exception("Invalid phone selected")
             End If
             If MessageBox.Show("Are you sure you want to delete this phone?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                ServiceContainer.PhoneService.Delete(phoneDto.Id)
+                ServiceRegistry.PhoneService.Delete(phoneDto.Id)
                 MessageBox.Show("Phone deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 LoadPhones()
             End If
@@ -92,7 +92,7 @@
         Dim worker As New ComponentModel.BackgroundWorker()
         AddHandler worker.DoWork, Sub(sender, e)
                                       Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
-                                      e.Result = ServiceContainer.PhoneService.GetPaged(query)
+                                      e.Result = ServiceRegistry.PhoneService.GetPaged(query)
                                   End Sub
         AddHandler worker.RunWorkerCompleted, Sub(sender, e)
                                                   If e.Error IsNot Nothing Then

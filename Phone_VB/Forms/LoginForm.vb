@@ -19,7 +19,7 @@
                 Return
             End If
 
-            Dim user As UserDto = ServiceRegistry.UserService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
+            Dim user As UserWithPermissionDto = ServiceRegistry.UserService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
             If user.Username Is Nothing Then
                 MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
@@ -38,9 +38,5 @@
             Debug.WriteLine("Login error: " & ex.Message)
             MessageBox.Show("Đăng nhập thất bại: " & ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-
-    Private Sub lblPassword_Click(sender As Object, e As EventArgs) Handles lblPassword.Click
-
     End Sub
 End Class
