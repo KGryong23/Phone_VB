@@ -29,9 +29,9 @@
             'CurrentUser.SetUser(user.Id, user.Username, user.Role)
 
             ' Mở PhoneForm trực tiếp
-            Using homeForm As New HomeForm()
+            Using mainForm As New MainForm()
                 Hide()
-                homeForm.ShowDialog()
+                mainForm.ShowDialog()
                 Close()
             End Using
         Catch ex As Exception
