@@ -88,7 +88,8 @@ Partial Class LoginForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(400, 319)
+        Me.BackColor = System.Drawing.Color.DarkSalmon
+        Me.ClientSize = New System.Drawing.Size(428, 319)
         Me.Controls.Add(Me.btnLogin)
         Me.Controls.Add(Me.txtPassword)
         Me.Controls.Add(Me.lblPassword)

@@ -1,10 +1,5 @@
 ﻿Public Class MainForm
-    Private pnlContent As Panel
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        pnlContent = New Panel()
-        pnlContent.Dock = DockStyle.Fill
-        SplitContainer1.Panel2.Controls.Add(pnlContent)
-
         Dim homeForm As New HomeForm()
         ShowFormInContentPanel(homeForm)
     End Sub
@@ -29,7 +24,7 @@
 
     End Sub
 
-    Private Sub btnRoleTransfer_Click(sender As Object, e As EventArgs) Handles btnRoleTransfer.Click
+    Private Sub btnRoleTransfer_Click(sender As Object, e As EventArgs)
 
     End Sub
 

@@ -37,14 +37,41 @@
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        If Not Decimal.TryParse(txtPrice.Text, Nothing) Then
-            Throw New ArgumentException("Price must be a valid number")
+        ' Xóa thông báo lỗi cũ
+        lblModelError.Text = ""
+        lblPriceError.Text = ""
+        lblStockError.Text = ""
+
+        Dim hasError As Boolean = False
+
+        ' Kiểm tra Model
+        If String.IsNullOrEmpty(txtModel.Text) Then
+            lblModelError.Text = "Vui lòng nhập mẫu điện thoại"
+            hasError = True
         End If
-        If Not Integer.TryParse(txtStock.Text, Nothing) Then
-            Throw New ArgumentException("Stock must be a valid number")
+
+        ' Kiểm tra Price
+        Dim priceValue As Decimal
+        If Not Decimal.TryParse(txtPrice.Text, priceValue) Then
+            lblPriceError.Text = "Giá phải là số hợp lệ"
+            hasError = True
+        ElseIf priceValue < 0 Then
+            lblPriceError.Text = "Giá phải >= 0"
+            hasError = True
         End If
-        If cboBrand.SelectedValue Is Nothing Then
-            Throw New ArgumentException("Please select a brand")
+
+        ' Kiểm tra Stock
+        Dim stockValue As Integer
+        If Not Integer.TryParse(txtStock.Text, stockValue) Then
+            lblStockError.Text = "Tồn kho phải là số nguyên"
+            hasError = True
+        ElseIf stockValue < 0 Then
+            lblStockError.Text = "Tồn kho phải >= 0"
+            hasError = True
+        End If
+
+        If hasError Then
+            Return
         End If
 
         If phoneId.HasValue AndAlso phoneId.Value <> 0 Then
@@ -52,8 +79,8 @@
             Dim request As New UpdatePhoneRequest With {
                 .Id = phoneId.Value,
                 .Model = txtModel.Text,
-                .Price = Convert.ToDecimal(txtPrice.Text),
-                .Stock = Convert.ToInt32(txtStock.Text),
+                .Price = priceValue,
+                .Stock = stockValue,
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
             ServiceRegistry.PhoneService.Update(request)
@@ -61,8 +88,8 @@
             ' Create
             Dim request As New CreatePhoneRequest With {
                 .Model = txtModel.Text,
-                .Price = Convert.ToDecimal(txtPrice.Text),
-                .Stock = Convert.ToInt32(txtStock.Text),
+                .Price = priceValue,
+                .Stock = stockValue,
                 .BrandId = Convert.ToInt32(cboBrand.SelectedValue)
             }
             ServiceRegistry.PhoneService.Add(request)
@@ -75,4 +102,5 @@
         DialogResult = DialogResult.Cancel
         Close()
     End Sub
+
 End Class

@@ -52,20 +52,19 @@
     Private Sub btnDetail_Click(sender As Object, e As EventArgs) Handles btnDetail.Click
         Try
             If dgvPhones.SelectedRows.Count = 0 Then
-                MessageBox.Show("Please select a phone to view details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Vui lòng chọn điện thoại để xem chi tiết.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
             Dim selectedRow As DataGridViewRow = dgvPhones.SelectedRows(0)
             Dim phoneDto As PhoneDto = TryCast(selectedRow.DataBoundItem, PhoneDto)
             If phoneDto Is Nothing Then
-                Throw New Exception("Invalid phone selected")
+                Throw New Exception("Không hợp lệ")
             End If
-            Dim details As String = String.Format("ID: {0}{1}Model: {2}{1}Price: {3}{1}Stock: {4}{1}Brand: {5}{1}Created At: {6}{1}Last Modified: {7}",
-                                                 phoneDto.Id, vbCrLf, phoneDto.Model, phoneDto.Price, phoneDto.Stock, phoneDto.BrandName,
-                                                 phoneDto.CreatedAt, phoneDto.LastModified)
-            MessageBox.Show(details, "Phone Details", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            Dim detailForm As New PhoneDetailForm(phoneDto)
+            detailForm.ShowDialog()
         Catch ex As Exception
-            MessageBox.Show("Failed to view phone details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Không thể xem chi tiết: " & ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -89,25 +88,59 @@
     End Sub
 
     Private Sub LoadPhones()
-        Dim worker As New ComponentModel.BackgroundWorker()
-        AddHandler worker.DoWork, Sub(sender, e)
-                                      Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
-                                      e.Result = ServiceRegistry.PhoneService.GetPaged(query)
-                                  End Sub
-        AddHandler worker.RunWorkerCompleted, Sub(sender, e)
-                                                  If e.Error IsNot Nothing Then
-                                                      MessageBox.Show("Failed to load phones: " & e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                                  Else
-                                                      Dim result As PagedResult(Of PhoneDto) = CType(e.Result, PagedResult(Of PhoneDto))
-                                                      totalRecords = result.TotalRecords
-                                                      dgvPhones.DataSource = result.Data
-                                                      Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
-                                                      lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
-                                                      btnPrevPage.Enabled = currentPage > 1
-                                                      btnNextPage.Enabled = currentPage < totalPages
-                                                  End If
-                                              End Sub
-        worker.RunWorkerAsync()
+        Try
+            Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
+            Dim result As PagedResult(Of PhoneDto) = ServiceRegistry.PhoneService.GetPaged(query)
+            totalRecords = result.TotalRecords
+
+            ' Thêm cột STT nếu chưa có
+            If Not dgvPhones.Columns.Contains("STT") Then
+                Dim sttColumn As New DataGridViewTextBoxColumn()
+                sttColumn.Name = "STT"
+                sttColumn.HeaderText = "STT"
+                sttColumn.Width = 50
+                sttColumn.ReadOnly = True
+                dgvPhones.Columns.Insert(0, sttColumn)
+            End If
+
+            dgvPhones.DataSource = result.Data
+
+            ' Cập nhật giá trị STT cho từng dòng
+            For i As Integer = 0 To dgvPhones.Rows.Count - 1
+                dgvPhones.Rows(i).Cells("STT").Value = (currentPage - 1) * pageSize + i + 1
+            Next
+
+            If dgvPhones.Columns.Contains("Id") Then
+                dgvPhones.Columns("Id").Visible = False
+            End If
+            If dgvPhones.Columns.Contains("CreatedAt") Then
+                dgvPhones.Columns("CreatedAt").Visible = False
+            End If
+            If dgvPhones.Columns.Contains("LastModified") Then
+                dgvPhones.Columns("LastModified").Visible = False
+            End If
+
+            If dgvPhones.Columns.Contains("Model") Then
+                dgvPhones.Columns("Model").HeaderText = "Mẫu điện thoại"
+            End If
+            If dgvPhones.Columns.Contains("Price") Then
+                dgvPhones.Columns("Price").HeaderText = "Giá"
+            End If
+            If dgvPhones.Columns.Contains("Stock") Then
+                dgvPhones.Columns("Stock").HeaderText = "Tồn kho"
+            End If
+            If dgvPhones.Columns.Contains("BrandName") Then
+                dgvPhones.Columns("BrandName").HeaderText = "Hãng"
+            End If
+            dgvPhones.DefaultCellStyle.Font = New Font("Segoe UI", 9)
+            dgvPhones.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 10)
+            Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
+            lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
+            btnPrevPage.Enabled = currentPage > 1
+            btnNextPage.Enabled = currentPage < totalPages
+        Catch ex As Exception
+            MessageBox.Show("Failed to load phones: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub cboQuantity_SelectedChanged(sender As Object, e As EventArgs) Handles cboQuantity.SelectedValueChanged
@@ -182,4 +215,5 @@
             MessageBox.Show("Failed to update phone: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
 End Class

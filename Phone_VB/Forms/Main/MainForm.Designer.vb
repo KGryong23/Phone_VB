@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,20 +20,18 @@ Partial Class MainForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnUserTransfer = New System.Windows.Forms.Button()
         Me.btnRoleTransfer = New System.Windows.Forms.Button()
         Me.btnStockTransfer = New System.Windows.Forms.Button()
         Me.btnPhoneTransfer = New System.Windows.Forms.Button()
         Me.btnHomeTransfer = New System.Windows.Forms.Button()
+        Me.pnlContent = New System.Windows.Forms.Panel()
         Me.pnlHeader.SuspendLayout()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -46,7 +44,7 @@ Partial Class MainForm
         Me.pnlHeader.Location = New System.Drawing.Point(0, 0)
         Me.pnlHeader.Margin = New System.Windows.Forms.Padding(2)
         Me.pnlHeader.Name = "pnlHeader"
-        Me.pnlHeader.Size = New System.Drawing.Size(939, 60)
+        Me.pnlHeader.Size = New System.Drawing.Size(956, 60)
         Me.pnlHeader.TabIndex = 0
         '
         'Label1
@@ -61,23 +59,6 @@ Partial Class MainForm
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Ứng dụng quản lý"
         '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 60)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Panel1)
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Padding = New System.Windows.Forms.Padding(2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(939, 370)
-        Me.SplitContainer1.SplitterDistance = 157
-        Me.SplitContainer1.TabIndex = 2
-        '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.Silver
@@ -88,19 +69,19 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me.btnPhoneTransfer)
         Me.Panel1.Controls.Add(Me.btnHomeTransfer)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Location = New System.Drawing.Point(0, 60)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(155, 370)
-        Me.Panel1.TabIndex = 2
+        Me.Panel1.Size = New System.Drawing.Size(141, 370)
+        Me.Panel1.TabIndex = 1
         '
         'btnUserTransfer
         '
         Me.btnUserTransfer.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnUserTransfer.Location = New System.Drawing.Point(0, 212)
+        Me.btnUserTransfer.Location = New System.Drawing.Point(0, 188)
         Me.btnUserTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnUserTransfer.Name = "btnUserTransfer"
-        Me.btnUserTransfer.Size = New System.Drawing.Size(153, 53)
+        Me.btnUserTransfer.Size = New System.Drawing.Size(139, 51)
         Me.btnUserTransfer.TabIndex = 3
         Me.btnUserTransfer.Text = "Quản lý người dùng"
         Me.btnUserTransfer.UseVisualStyleBackColor = True
@@ -108,10 +89,10 @@ Partial Class MainForm
         'btnRoleTransfer
         '
         Me.btnRoleTransfer.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnRoleTransfer.Location = New System.Drawing.Point(0, 159)
+        Me.btnRoleTransfer.Location = New System.Drawing.Point(0, 140)
         Me.btnRoleTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRoleTransfer.Name = "btnRoleTransfer"
-        Me.btnRoleTransfer.Size = New System.Drawing.Size(153, 53)
+        Me.btnRoleTransfer.Size = New System.Drawing.Size(139, 48)
         Me.btnRoleTransfer.TabIndex = 4
         Me.btnRoleTransfer.Text = "Quản lý vai trò"
         Me.btnRoleTransfer.UseVisualStyleBackColor = True
@@ -119,10 +100,10 @@ Partial Class MainForm
         'btnStockTransfer
         '
         Me.btnStockTransfer.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnStockTransfer.Location = New System.Drawing.Point(0, 106)
+        Me.btnStockTransfer.Location = New System.Drawing.Point(0, 94)
         Me.btnStockTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnStockTransfer.Name = "btnStockTransfer"
-        Me.btnStockTransfer.Size = New System.Drawing.Size(153, 53)
+        Me.btnStockTransfer.Size = New System.Drawing.Size(139, 46)
         Me.btnStockTransfer.TabIndex = 2
         Me.btnStockTransfer.Text = "Quản lý xuất nhập"
         Me.btnStockTransfer.UseVisualStyleBackColor = True
@@ -130,10 +111,10 @@ Partial Class MainForm
         'btnPhoneTransfer
         '
         Me.btnPhoneTransfer.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnPhoneTransfer.Location = New System.Drawing.Point(0, 53)
+        Me.btnPhoneTransfer.Location = New System.Drawing.Point(0, 48)
         Me.btnPhoneTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnPhoneTransfer.Name = "btnPhoneTransfer"
-        Me.btnPhoneTransfer.Size = New System.Drawing.Size(153, 53)
+        Me.btnPhoneTransfer.Size = New System.Drawing.Size(139, 46)
         Me.btnPhoneTransfer.TabIndex = 3
         Me.btnPhoneTransfer.Text = "Quản lý điện thoại"
         Me.btnPhoneTransfer.UseVisualStyleBackColor = True
@@ -145,28 +126,35 @@ Partial Class MainForm
         Me.btnHomeTransfer.Location = New System.Drawing.Point(0, 0)
         Me.btnHomeTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnHomeTransfer.Name = "btnHomeTransfer"
-        Me.btnHomeTransfer.Size = New System.Drawing.Size(153, 53)
+        Me.btnHomeTransfer.Size = New System.Drawing.Size(139, 48)
         Me.btnHomeTransfer.TabIndex = 0
         Me.btnHomeTransfer.Text = "Trang chủ"
         Me.btnHomeTransfer.UseVisualStyleBackColor = False
+        '
+        'pnlContent
+        '
+        Me.pnlContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnlContent.Location = New System.Drawing.Point(141, 60)
+        Me.pnlContent.Name = "pnlContent"
+        Me.pnlContent.Size = New System.Drawing.Size(815, 370)
+        Me.pnlContent.TabIndex = 2
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.AutoSize = True
-        Me.ClientSize = New System.Drawing.Size(939, 430)
-        Me.Controls.Add(Me.SplitContainer1)
+        Me.ClientSize = New System.Drawing.Size(956, 430)
+        Me.Controls.Add(Me.pnlContent)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.pnlHeader)
         Me.Font = New System.Drawing.Font("Segoe UI", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "MainForm"
         Me.Text = "MainForm"
         Me.pnlHeader.ResumeLayout(False)
         Me.pnlHeader.PerformLayout()
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -174,11 +162,11 @@ Partial Class MainForm
 
     Friend WithEvents pnlHeader As Panel
     Friend WithEvents Label1 As Label
-    Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents Panel1 As Panel
     Friend WithEvents btnUserTransfer As Button
     Friend WithEvents btnRoleTransfer As Button
     Friend WithEvents btnStockTransfer As Button
     Friend WithEvents btnPhoneTransfer As Button
     Friend WithEvents btnHomeTransfer As Button
+    Friend WithEvents pnlContent As Panel
 End Class
