@@ -96,21 +96,29 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\Dtos\BrandDto.vb" />
     <Compile Include="Classes\Dtos\CreatePhoneRequest.vb" />
+    <Compile Include="Classes\Dtos\ExportRequestDto.vb" />
+    <Compile Include="Classes\Dtos\ImportRequestDto.vb" />
     <Compile Include="Classes\Dtos\LoginRequest.vb" />
     <Compile Include="Classes\Dtos\PhoneDto.vb" />
     <Compile Include="Classes\Dtos\UpdatePhoneRequest.vb" />
     <Compile Include="Classes\Dtos\UserDto.vb" />
+    <Compile Include="Classes\Models\StockTransaction.vb" />
+    <Compile Include="Classes\Dtos\StockTransactionDto.vb" />
     <Compile Include="Classes\Repositories\BrandRepository.vb" />
     <Compile Include="Classes\Repositories\IBrandRepository.vb" />
     <Compile Include="Classes\Repositories\IPhoneRepository.vb" />
+    <Compile Include="Classes\Repositories\IStockTransactionRepository.vb" />
     <Compile Include="Classes\Repositories\IUserRepository.vb" />
     <Compile Include="Classes\Repositories\PhoneRepository.vb" />
+    <Compile Include="Classes\Repositories\StockTransactionRepository.vb" />
     <Compile Include="Classes\Repositories\UserRepository.vb" />
     <Compile Include="Classes\Services\BrandService.vb" />
     <Compile Include="Classes\Services\IBrandService.vb" />
     <Compile Include="Classes\Services\IPhoneService.vb" />
+    <Compile Include="Classes\Services\IStockTransactionService.vb" />
     <Compile Include="Classes\Services\IUserService.vb" />
     <Compile Include="Classes\Services\PhoneService.vb" />
+    <Compile Include="Classes\Services\StockTransactionService.vb" />
     <Compile Include="Classes\Services\UserService.vb" />
     <Compile Include="Classes\Models\Brand.vb" />
     <Compile Include="Classes\Models\Phone.vb" />
@@ -151,6 +159,24 @@
     <Compile Include="Forms\Phone\PhoneInputForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Phone\StockInOutForm.Designer.vb">
+      <DependentUpon>StockInOutForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Phone\StockInOutForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StockTrans\StockTransDetailForm.Designer.vb">
+      <DependentUpon>StockTransDetailForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StockTrans\StockTransDetailForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StockTrans\StockTransForm.Designer.vb">
+      <DependentUpon>StockTransForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StockTrans\StockTransForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -189,6 +215,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Phone\PhoneInputForm.resx">
       <DependentUpon>PhoneInputForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Phone\StockInOutForm.resx">
+      <DependentUpon>StockInOutForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StockTrans\StockTransForm.resx">
+      <DependentUpon>StockTransForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

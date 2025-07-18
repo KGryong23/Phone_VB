@@ -21,7 +21,8 @@
     End Sub
 
     Private Sub btnStockTransfer_Click(sender As Object, e As EventArgs) Handles btnStockTransfer.Click
-
+        Dim stockTransForm As New StockTransForm()
+        ShowFormInContentPanel(stockTransForm)
     End Sub
 
     Private Sub btnRoleTransfer_Click(sender As Object, e As EventArgs)

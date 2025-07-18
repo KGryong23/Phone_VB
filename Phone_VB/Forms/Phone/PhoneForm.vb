@@ -98,7 +98,7 @@
                 Dim sttColumn As New DataGridViewTextBoxColumn()
                 sttColumn.Name = "STT"
                 sttColumn.HeaderText = "STT"
-                sttColumn.Width = 50
+                sttColumn.Width = 30
                 sttColumn.ReadOnly = True
                 dgvPhones.Columns.Insert(0, sttColumn)
             End If
@@ -216,4 +216,37 @@
         End Try
     End Sub
 
+    Private Sub btnImport_Click(sender As Object, e As EventArgs) Handles btnImport.Click
+        If dgvPhones.SelectedRows.Count = 0 Then
+            MessageBox.Show("Vui lòng chọn điện thoại để nhập kho.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim selectedRow As DataGridViewRow = dgvPhones.SelectedRows(0)
+        Dim phoneDto As PhoneDto = TryCast(selectedRow.DataBoundItem, PhoneDto)
+        If phoneDto Is Nothing Then
+            MessageBox.Show("Không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        Dim currentUserId As Integer = CurrentUser.UserId
+        Dim stockForm As New StockInOutForm("import", phoneDto, currentUserId)
+        stockForm.ShowDialog()
+    End Sub
+
+    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+        If dgvPhones.SelectedRows.Count = 0 Then
+            MessageBox.Show("Vui lòng chọn điện thoại để xuất kho.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim selectedRow As DataGridViewRow = dgvPhones.SelectedRows(0)
+        Dim phoneDto As PhoneDto = TryCast(selectedRow.DataBoundItem, PhoneDto)
+        If phoneDto Is Nothing Then
+            MessageBox.Show("Không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        Dim currentUserId As Integer = CurrentUser.UserId ' Giả sử có biến CurrentUser toàn cục
+        Dim stockForm As New StockInOutForm("export", phoneDto, currentUserId)
+        stockForm.ShowDialog()
+    End Sub
 End Class

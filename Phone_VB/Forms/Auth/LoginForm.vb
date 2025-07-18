@@ -25,8 +25,8 @@
                 Return
             End If
 
-            ' Lưu thông tin người dùng hiện tại
-            'CurrentUser.SetUser(user.Id, user.Username, user.Role)
+            'Lưu thông tin người dùng hiện tại
+            CurrentUser.SetUser(user.Id, user.Username)
 
             ' Mở PhoneForm trực tiếp
             Using mainForm As New MainForm()

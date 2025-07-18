@@ -33,8 +33,8 @@ Partial Class PhoneForm
         Me.btnDetail = New System.Windows.Forms.Button()
         Me.txtKeyword = New System.Windows.Forms.TextBox()
         Me.lblPageInfo = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btnExport = New System.Windows.Forms.Button()
+        Me.btnImport = New System.Windows.Forms.Button()
         CType(Me.dgvPhones, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -53,7 +53,7 @@ Partial Class PhoneForm
         '
         Me.btnSearch.BackColor = System.Drawing.Color.DodgerBlue
         Me.btnSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.btnSearch.Location = New System.Drawing.Point(466, 26)
+        Me.btnSearch.Location = New System.Drawing.Point(484, 27)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(94, 36)
         Me.btnSearch.TabIndex = 1
@@ -66,7 +66,7 @@ Partial Class PhoneForm
         Me.dgvPhones.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders
         Me.dgvPhones.BackgroundColor = System.Drawing.Color.Gainsboro
         Me.dgvPhones.ColumnHeadersHeight = 29
-        Me.dgvPhones.Location = New System.Drawing.Point(14, 77)
+        Me.dgvPhones.Location = New System.Drawing.Point(2, 77)
         Me.dgvPhones.MultiSelect = False
         Me.dgvPhones.Name = "dgvPhones"
         Me.dgvPhones.ReadOnly = True
@@ -74,7 +74,7 @@ Partial Class PhoneForm
         Me.dgvPhones.RowTemplate.Height = 32
         Me.dgvPhones.RowTemplate.ReadOnly = True
         Me.dgvPhones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvPhones.Size = New System.Drawing.Size(760, 229)
+        Me.dgvPhones.Size = New System.Drawing.Size(783, 229)
         Me.dgvPhones.TabIndex = 33
         '
         'btnUpdate
@@ -123,7 +123,7 @@ Partial Class PhoneForm
         Me.cboQuantity.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.cboQuantity.ForeColor = System.Drawing.SystemColors.Highlight
         Me.cboQuantity.FormattingEnabled = True
-        Me.cboQuantity.Location = New System.Drawing.Point(632, 318)
+        Me.cboQuantity.Location = New System.Drawing.Point(638, 318)
         Me.cboQuantity.Name = "cboQuantity"
         Me.cboQuantity.Size = New System.Drawing.Size(85, 25)
         Me.cboQuantity.TabIndex = 10
@@ -158,25 +158,25 @@ Partial Class PhoneForm
         Me.lblPageInfo.Size = New System.Drawing.Size(220, 26)
         Me.lblPageInfo.TabIndex = 13
         '
-        'Button1
+        'btnExport
         '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.Button1.Location = New System.Drawing.Point(115, 319)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(97, 37)
-        Me.Button1.TabIndex = 34
-        Me.Button1.Text = "Xuất kho"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnExport.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.btnExport.Location = New System.Drawing.Point(124, 318)
+        Me.btnExport.Name = "btnExport"
+        Me.btnExport.Size = New System.Drawing.Size(97, 37)
+        Me.btnExport.TabIndex = 34
+        Me.btnExport.Text = "Xuất kho"
+        Me.btnExport.UseVisualStyleBackColor = True
         '
-        'Button2
+        'btnImport
         '
-        Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.Button2.Location = New System.Drawing.Point(12, 318)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(94, 38)
-        Me.Button2.TabIndex = 35
-        Me.Button2.Text = "Nhập kho"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.btnImport.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
+        Me.btnImport.Location = New System.Drawing.Point(15, 318)
+        Me.btnImport.Name = "btnImport"
+        Me.btnImport.Size = New System.Drawing.Size(94, 37)
+        Me.btnImport.TabIndex = 35
+        Me.btnImport.Text = "Nhập kho"
+        Me.btnImport.UseVisualStyleBackColor = True
         '
         'PhoneForm
         '
@@ -184,8 +184,8 @@ Partial Class PhoneForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.ClientSize = New System.Drawing.Size(786, 422)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.btnImport)
+        Me.Controls.Add(Me.btnExport)
         Me.Controls.Add(Me.lblPageInfo)
         Me.Controls.Add(Me.txtKeyword)
         Me.Controls.Add(Me.btnDetail)
@@ -216,6 +216,6 @@ Partial Class PhoneForm
     Friend WithEvents btnDetail As Button
     Friend WithEvents txtKeyword As TextBox
     Friend WithEvents lblPageInfo As TextBox
-    Friend WithEvents Button1 As Button
-    Friend WithEvents Button2 As Button
+    Friend WithEvents btnExport As Button
+    Friend WithEvents btnImport As Button
 End Class
