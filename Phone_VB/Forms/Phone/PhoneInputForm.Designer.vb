@@ -44,84 +44,84 @@ Partial Class PhoneInputForm
         '
         Me.lblModel.AutoSize = True
         Me.lblModel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.lblModel.Location = New System.Drawing.Point(132, 77)
+        Me.lblModel.Location = New System.Drawing.Point(92, 77)
         Me.lblModel.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblModel.Name = "lblModel"
-        Me.lblModel.Size = New System.Drawing.Size(94, 19)
+        Me.lblModel.Size = New System.Drawing.Size(97, 19)
         Me.lblModel.TabIndex = 0
-        Me.lblModel.Text = "Tên sản phẩm"
+        Me.lblModel.Text = "Tên sản phẩm:"
         '
         'txtModel
         '
-        Me.txtModel.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtModel.Location = New System.Drawing.Point(239, 66)
+        Me.txtModel.Font = New System.Drawing.Font("Segoe UI", 14.0!)
+        Me.txtModel.Location = New System.Drawing.Point(202, 64)
         Me.txtModel.Margin = New System.Windows.Forms.Padding(4)
-        Me.txtModel.Multiline = True
         Me.txtModel.Name = "txtModel"
-        Me.txtModel.Size = New System.Drawing.Size(180, 30)
+        Me.txtModel.Size = New System.Drawing.Size(180, 32)
         Me.txtModel.TabIndex = 1
         '
         'lblPrice
         '
         Me.lblPrice.AutoSize = True
-        Me.lblPrice.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPrice.Location = New System.Drawing.Point(199, 139)
+        Me.lblPrice.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.lblPrice.Location = New System.Drawing.Point(157, 126)
         Me.lblPrice.Name = "lblPrice"
-        Me.lblPrice.Size = New System.Drawing.Size(27, 17)
+        Me.lblPrice.Size = New System.Drawing.Size(32, 19)
         Me.lblPrice.TabIndex = 2
-        Me.lblPrice.Text = "Giá"
+        Me.lblPrice.Text = "Giá:"
         '
         'txtPrice
         '
-        Me.txtPrice.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPrice.Location = New System.Drawing.Point(239, 127)
-        Me.txtPrice.Multiline = True
+        Me.txtPrice.Font = New System.Drawing.Font("Segoe UI", 14.0!)
+        Me.txtPrice.Location = New System.Drawing.Point(202, 113)
         Me.txtPrice.Name = "txtPrice"
-        Me.txtPrice.Size = New System.Drawing.Size(180, 29)
+        Me.txtPrice.Size = New System.Drawing.Size(180, 32)
         Me.txtPrice.TabIndex = 3
         '
         'txtStock
         '
-        Me.txtStock.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtStock.Location = New System.Drawing.Point(239, 183)
-        Me.txtStock.Multiline = True
+        Me.txtStock.Font = New System.Drawing.Font("Segoe UI", 14.0!)
+        Me.txtStock.Location = New System.Drawing.Point(202, 162)
         Me.txtStock.Name = "txtStock"
-        Me.txtStock.Size = New System.Drawing.Size(180, 31)
+        Me.txtStock.Size = New System.Drawing.Size(180, 32)
         Me.txtStock.TabIndex = 4
         '
         'lblStock
         '
         Me.lblStock.AutoSize = True
         Me.lblStock.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.lblStock.Location = New System.Drawing.Point(167, 195)
+        Me.lblStock.Location = New System.Drawing.Point(127, 175)
         Me.lblStock.Name = "lblStock"
-        Me.lblStock.Size = New System.Drawing.Size(59, 19)
+        Me.lblStock.Size = New System.Drawing.Size(62, 19)
         Me.lblStock.TabIndex = 5
-        Me.lblStock.Text = "Tồn kho"
+        Me.lblStock.Text = "Tồn kho:"
         '
         'cboBrand
         '
-        Me.cboBrand.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.cboBrand.Font = New System.Drawing.Font("Segoe UI", 14.0!)
         Me.cboBrand.FormattingEnabled = True
-        Me.cboBrand.Location = New System.Drawing.Point(239, 241)
+        Me.cboBrand.Location = New System.Drawing.Point(202, 211)
         Me.cboBrand.Name = "cboBrand"
-        Me.cboBrand.Size = New System.Drawing.Size(180, 25)
+        Me.cboBrand.Size = New System.Drawing.Size(180, 33)
         Me.cboBrand.TabIndex = 6
         '
         'lblBrand
         '
         Me.lblBrand.AutoSize = True
         Me.lblBrand.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.lblBrand.Location = New System.Drawing.Point(140, 247)
+        Me.lblBrand.Location = New System.Drawing.Point(100, 225)
         Me.lblBrand.Name = "lblBrand"
-        Me.lblBrand.Size = New System.Drawing.Size(86, 19)
+        Me.lblBrand.Size = New System.Drawing.Size(89, 19)
         Me.lblBrand.TabIndex = 8
-        Me.lblBrand.Text = "Thương hiệu"
+        Me.lblBrand.Text = "Thương hiệu:"
         '
         'btnSave
         '
         Me.btnSave.BackColor = System.Drawing.Color.RoyalBlue
-        Me.btnSave.Location = New System.Drawing.Point(239, 298)
+        Me.btnSave.FlatAppearance.BorderSize = 0
+        Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btnSave.Location = New System.Drawing.Point(202, 286)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(83, 36)
         Me.btnSave.TabIndex = 9
@@ -131,7 +131,10 @@ Partial Class PhoneInputForm
         'btnCancel
         '
         Me.btnCancel.BackColor = System.Drawing.Color.Crimson
-        Me.btnCancel.Location = New System.Drawing.Point(340, 298)
+        Me.btnCancel.FlatAppearance.BorderSize = 0
+        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCancel.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btnCancel.Location = New System.Drawing.Point(303, 286)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(79, 36)
         Me.btnCancel.TabIndex = 10
@@ -154,19 +157,19 @@ Partial Class PhoneInputForm
         'lblPriceError
         '
         Me.lblPriceError.AutoSize = True
+        Me.lblPriceError.ForeColor = System.Drawing.Color.Red
         Me.lblPriceError.Location = New System.Drawing.Point(236, 159)
         Me.lblPriceError.Name = "lblPriceError"
         Me.lblPriceError.Size = New System.Drawing.Size(0, 15)
-        Me.lblPriceError.ForeColor = System.Drawing.Color.Red
         Me.lblPriceError.TabIndex = 12
         '
         'lblStockError
         '
         Me.lblStockError.AutoSize = True
+        Me.lblStockError.ForeColor = System.Drawing.Color.Red
         Me.lblStockError.Location = New System.Drawing.Point(236, 217)
         Me.lblStockError.Name = "lblStockError"
         Me.lblStockError.Size = New System.Drawing.Size(0, 15)
-        Me.lblStockError.ForeColor = System.Drawing.Color.Red
         Me.lblStockError.TabIndex = 13
         '
         'PhoneInputForm
@@ -174,7 +177,7 @@ Partial Class PhoneInputForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DarkKhaki
-        Me.ClientSize = New System.Drawing.Size(607, 401)
+        Me.ClientSize = New System.Drawing.Size(531, 382)
         Me.Controls.Add(Me.lblStockError)
         Me.Controls.Add(Me.lblPriceError)
         Me.Controls.Add(Me.lblModelError)

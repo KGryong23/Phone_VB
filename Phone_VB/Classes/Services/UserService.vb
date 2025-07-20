@@ -7,7 +7,7 @@
         Me.userRepo = userRepo
     End Sub
 
-    Public Function CheckLogin(request As LoginRequest) As UserWithPermissionDto Implements IUserService.CheckLogin
+    Public Function CheckLogin(request As LoginRequest) As UserDto Implements IUserService.CheckLogin
         If String.IsNullOrEmpty(request.Username) Then
             Throw New ArgumentException("Username cannot be empty")
         End If
@@ -16,9 +16,10 @@
         End If
         Return MapToUerDto(userRepo.CheckLogin(request.Username, request.Password))
     End Function
-    Private Function MapToUerDto(user As User) As UserWithPermissionDto
-        Return New UserWithPermissionDto With {
+    Private Function MapToUerDto(user As User) As UserDto
+        Return New UserDto With {
             .Id = user.Id,
+            .RoleId = user.RoleId,
             .Username = user.Username
         }
     End Function

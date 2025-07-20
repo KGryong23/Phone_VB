@@ -85,16 +85,16 @@ VALUES
 ('Poco X5 Pro', 299.99, 80, 3, NOW(), NOW()),
 ('Mi 11 Ultra', 749.99, 10, 3, NOW(), NOW());
 
-INSERT INTO roles (name, description) VALUES ('admin', 'hihihihihi');
-INSERT INTO roles (name, description) VALUES ('user', 'hahahahaha');
+INSERT INTO roles (name, description) VALUES ('admin', 'admin123');
+INSERT INTO roles (name, description) VALUES ('user', 'user123');
 
 INSERT INTO users (username, password, role_id, created_at, last_modified)
 VALUES 
 -- Admin user
-('elite', 'hashed', 1, NOW(), NOW()),
+('elite', '1232003', 1, NOW(), NOW()),
 
 -- Normal user
-('sync', 'hashed', 2, NOW(), NOW());
+('sync', '1232003', 2, NOW(), NOW());
 
 CREATE PROCEDURE upsert_phone (
     IN p_id INT,

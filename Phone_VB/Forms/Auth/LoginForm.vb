@@ -19,14 +19,18 @@
                 Return
             End If
 
-            Dim user As UserWithPermissionDto = ServiceRegistry.UserService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
+            Dim user As UserDto = ServiceRegistry.UserService.CheckLogin(New LoginRequest With {.Username = username, .Password = password})
             If user.Username Is Nothing Then
                 MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return
             End If
 
-            'Lưu thông tin người dùng hiện tại
-            CurrentUser.SetUser(user.Id, user.Username)
+            ' Lấy danh sách quyền của người dùng
+            Dim permissions As List(Of PermissionDto) = ServiceRegistry.PermissionService.GetAllByRole(user.RoleId)
+
+            ' Sau khi lấy danh sách quyền (List(Of PermissionDto)), chỉ lấy name:
+            Dim permissionNames = New HashSet(Of String)(permissions.Select(Function(p) p.Name))
+            CurrentUser.SetUser(user.Id, user.Username, user.RoleId, permissionNames)
 
             ' Mở PhoneForm trực tiếp
             Using mainForm As New MainForm()

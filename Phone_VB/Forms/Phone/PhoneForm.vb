@@ -2,10 +2,18 @@
     Private currentPage As Integer = 1
     Private pageSize As Integer = 5
     Private totalRecords As Integer = 0
+    Private WithEvents bgwLoad As New System.ComponentModel.BackgroundWorker()
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            ' Khởi tạo cboQuantity
+            ' Phân quyền hiển thị nút
+            btnCreate.Visible = CurrentUser.HasPermission("add_phone")
+            btnUpdate.Visible = CurrentUser.HasPermission("update_phone")
+            btnDelete.Visible = CurrentUser.HasPermission("delete_phone")
+            btnDetail.Visible = CurrentUser.HasPermission("detail_phone")
+            btnImport.Visible = CurrentUser.HasPermission("import_stock")
+            btnExport.Visible = CurrentUser.HasPermission("export_stock")
+
             cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(5, "5 bản ghi"))
             cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(10, "10 bản ghi"))
             cboQuantity.Items.Add(New KeyValuePair(Of Integer, String)(15, "15 bản ghi"))
@@ -14,12 +22,6 @@
             cboQuantity.DisplayMember = "Value"
             cboQuantity.ValueMember = "Key"
             cboQuantity.SelectedIndex = 0
-
-            'If Not CurrentUser.IsAdmin Then
-            '    btnCreate.Visible = False
-            '    btnUpdate.Visible = False
-            '    btnDelete.Visible = False
-            'End If
 
             ' Tải danh sách điện thoại
             LoadPhones()
@@ -88,59 +90,64 @@
     End Sub
 
     Private Sub LoadPhones()
-        Try
-            Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
-            Dim result As PagedResult(Of PhoneDto) = ServiceRegistry.PhoneService.GetPaged(query)
-            totalRecords = result.TotalRecords
+        If Not bgwLoad.IsBusy Then
+            btnSearch.Enabled = False
+            btnPrevPage.Enabled = False
+            btnNextPage.Enabled = False
+            dgvPhones.DataSource = Nothing
+            bgwLoad.RunWorkerAsync(New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize))
+        End If
+    End Sub
 
-            ' Thêm cột STT nếu chưa có
-            If Not dgvPhones.Columns.Contains("STT") Then
-                Dim sttColumn As New DataGridViewTextBoxColumn()
-                sttColumn.Name = "STT"
-                sttColumn.HeaderText = "STT"
-                sttColumn.Width = 30
-                sttColumn.ReadOnly = True
-                dgvPhones.Columns.Insert(0, sttColumn)
-            End If
+    Private Sub bgwLoad_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles bgwLoad.DoWork
+        Dim query As BaseQuery = CType(e.Argument, BaseQuery)
+        Dim result As PagedResult(Of PhoneDto) = ServiceRegistry.PhoneService.GetPaged(query)
+        e.Result = result
+    End Sub
 
-            dgvPhones.DataSource = result.Data
+    Private Sub bgwLoad_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgwLoad.RunWorkerCompleted
+        btnSearch.Enabled = True
+        btnPrevPage.Enabled = True
+        btnNextPage.Enabled = True
 
-            ' Cập nhật giá trị STT cho từng dòng
-            For i As Integer = 0 To dgvPhones.Rows.Count - 1
-                dgvPhones.Rows(i).Cells("STT").Value = (currentPage - 1) * pageSize + i + 1
-            Next
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("Failed to load phones: " & e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
 
-            If dgvPhones.Columns.Contains("Id") Then
-                dgvPhones.Columns("Id").Visible = False
-            End If
-            If dgvPhones.Columns.Contains("CreatedAt") Then
-                dgvPhones.Columns("CreatedAt").Visible = False
-            End If
-            If dgvPhones.Columns.Contains("LastModified") Then
-                dgvPhones.Columns("LastModified").Visible = False
-            End If
+        Dim result As PagedResult(Of PhoneDto) = CType(e.Result, PagedResult(Of PhoneDto))
+        totalRecords = result.TotalRecords
 
-            If dgvPhones.Columns.Contains("Model") Then
-                dgvPhones.Columns("Model").HeaderText = "Mẫu điện thoại"
-            End If
-            If dgvPhones.Columns.Contains("Price") Then
-                dgvPhones.Columns("Price").HeaderText = "Giá"
-            End If
-            If dgvPhones.Columns.Contains("Stock") Then
-                dgvPhones.Columns("Stock").HeaderText = "Tồn kho"
-            End If
-            If dgvPhones.Columns.Contains("BrandName") Then
-                dgvPhones.Columns("BrandName").HeaderText = "Hãng"
-            End If
-            dgvPhones.DefaultCellStyle.Font = New Font("Segoe UI", 9)
-            dgvPhones.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 10)
-            Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
-            lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
-            btnPrevPage.Enabled = currentPage > 1
-            btnNextPage.Enabled = currentPage < totalPages
-        Catch ex As Exception
-            MessageBox.Show("Failed to load phones: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        ' Thêm cột STT nếu chưa có
+        If Not dgvPhones.Columns.Contains("STT") Then
+            Dim sttColumn As New DataGridViewTextBoxColumn()
+            sttColumn.Name = "STT"
+            sttColumn.HeaderText = "STT"
+            sttColumn.Width = 30
+            sttColumn.ReadOnly = True
+            dgvPhones.Columns.Insert(0, sttColumn)
+        End If
+
+        dgvPhones.DataSource = result.Data
+
+        For i As Integer = 0 To dgvPhones.Rows.Count - 1
+            dgvPhones.Rows(i).Cells("STT").Value = (currentPage - 1) * pageSize + i + 1
+        Next
+
+        If dgvPhones.Columns.Contains("Id") Then dgvPhones.Columns("Id").Visible = False
+        If dgvPhones.Columns.Contains("CreatedAt") Then dgvPhones.Columns("CreatedAt").Visible = False
+        If dgvPhones.Columns.Contains("LastModified") Then dgvPhones.Columns("LastModified").Visible = False
+        If dgvPhones.Columns.Contains("Model") Then dgvPhones.Columns("Model").HeaderText = "Mẫu điện thoại"
+        If dgvPhones.Columns.Contains("Price") Then dgvPhones.Columns("Price").HeaderText = "Giá"
+        If dgvPhones.Columns.Contains("Stock") Then dgvPhones.Columns("Stock").HeaderText = "Tồn kho"
+        If dgvPhones.Columns.Contains("BrandName") Then dgvPhones.Columns("BrandName").HeaderText = "Hãng"
+
+        dgvPhones.DefaultCellStyle.Font = New Font("Segoe UI", 9)
+        dgvPhones.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 10)
+        Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
+        lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
+        btnPrevPage.Enabled = currentPage > 1
+        btnNextPage.Enabled = currentPage < totalPages
     End Sub
 
     Private Sub cboQuantity_SelectedChanged(sender As Object, e As EventArgs) Handles cboQuantity.SelectedValueChanged
@@ -160,7 +167,6 @@
             MessageBox.Show("Failed to change page size: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
 
     Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
         Try

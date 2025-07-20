@@ -13,6 +13,7 @@ Namespace My
             ' Kiểm tra kết nối cơ sở dữ liệu
             If TestConnection() Then
                 ServiceRegistry.InitializeServices()
+                SyncPermissions() ' Đồng bộ quyền vào bảng permissions
                 ' Khởi tạo các service
             Else
                 ' Hủy khởi động nếu kết nối thất bại

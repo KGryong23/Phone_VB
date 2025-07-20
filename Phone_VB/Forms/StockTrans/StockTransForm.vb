@@ -21,62 +21,69 @@
     End Sub
 
     Private Sub LoadStockTransactions()
-        Try
-            Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
-            Dim result = ServiceRegistry.StockTransactionService.GetPaged(query)
-            totalRecords = result.TotalRecords
+        Dim worker As New ComponentModel.BackgroundWorker()
+        AddHandler worker.DoWork, Sub(sender, e)
+                                      Dim query As New BaseQuery(txtKeyword.Text, (currentPage - 1) * pageSize, pageSize)
+                                      e.Result = ServiceRegistry.StockTransactionService.GetPaged(query)
+                                  End Sub
+        AddHandler worker.RunWorkerCompleted, Sub(sender, e)
+                                                  If e.Error IsNot Nothing Then
+                                                      MessageBox.Show("Không thể tải giao dịch kho: " & e.Error.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                  Else
+                                                      Dim result As PagedResult(Of StockTransactionDto) = CType(e.Result, PagedResult(Of StockTransactionDto))
+                                                      totalRecords = result.TotalRecords
 
-            If Not dgvStockTrans.Columns.Contains("STT") Then
-                Dim sttColumn As New DataGridViewTextBoxColumn()
-                sttColumn.Name = "STT"
-                sttColumn.HeaderText = "STT"
-                dgvStockTrans.Columns.Insert(0, sttColumn)
-            End If
+                                                      If Not dgvStockTrans.Columns.Contains("STT") Then
+                                                          Dim sttColumn As New DataGridViewTextBoxColumn()
+                                                          sttColumn.Name = "STT"
+                                                          sttColumn.HeaderText = "STT"
+                                                          sttColumn.Width = 30
+                                                          sttColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                                                          dgvStockTrans.Columns.Insert(0, sttColumn)
+                                                      End If
 
-            dgvStockTrans.DataSource = result.Data
+                                                      dgvStockTrans.DataSource = result.Data
 
-            For i As Integer = 0 To dgvStockTrans.Rows.Count - 1
-                dgvStockTrans.Rows(i).Cells("STT").Value = (currentPage - 1) * pageSize + i + 1
-            Next
+                                                      For i As Integer = 0 To dgvStockTrans.Rows.Count - 1
+                                                          dgvStockTrans.Rows(i).Cells("STT").Value = (currentPage - 1) * pageSize + i + 1
+                                                      Next
 
-            If dgvStockTrans.Columns.Contains("Id") Then
-                dgvStockTrans.Columns("Id").Visible = False
-            End If
+                                                      If dgvStockTrans.Columns.Contains("Id") Then
+                                                          dgvStockTrans.Columns("Id").Visible = False
+                                                      End If
 
-            Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
-            lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
-            btnPrevPage.Enabled = currentPage > 1
-            btnNextPage.Enabled = currentPage < totalPages
+                                                      Dim totalPages As Integer = CInt(Math.Ceiling(totalRecords / pageSize))
+                                                      lblPageInfo.Text = String.Format("Trang {0} trên {1} ({2} tổng số bản ghi)", currentPage, If(totalPages = 0, 1, totalPages), totalRecords)
+                                                      btnPrevPage.Enabled = currentPage > 1
+                                                      btnNextPage.Enabled = currentPage < totalPages
 
-            ' Chỉ hiển thị các cột mong muốn, ẩn các cột khác
-            For Each col As DataGridViewColumn In dgvStockTrans.Columns
-                Select Case col.Name
-                    Case "STT", "PhoneName", "UserName", "Quantity", "TransactionType", "Status"
-                        col.Visible = True
-                    Case Else
-                        col.Visible = False
-                End Select
-            Next
+                                                      For Each col As DataGridViewColumn In dgvStockTrans.Columns
+                                                          Select Case col.Name
+                                                              Case "STT", "PhoneName", "UserName", "Quantity", "TransactionType", "Status"
+                                                                  col.Visible = True
+                                                              Case Else
+                                                                  col.Visible = False
+                                                          End Select
+                                                      Next
 
-            ' Đặt lại tiêu đề tiếng Việt cho các cột
-            If dgvStockTrans.Columns.Contains("PhoneName") Then
-                dgvStockTrans.Columns("PhoneName").HeaderText = "Tên sản phẩm"
-            End If
-            If dgvStockTrans.Columns.Contains("UserName") Then
-                dgvStockTrans.Columns("UserName").HeaderText = "Người yêu cầu"
-            End If
-            If dgvStockTrans.Columns.Contains("Quantity") Then
-                dgvStockTrans.Columns("Quantity").HeaderText = "Số lượng"
-            End If
-            If dgvStockTrans.Columns.Contains("TransactionType") Then
-                dgvStockTrans.Columns("TransactionType").HeaderText = "Kiểu"
-            End If
-            If dgvStockTrans.Columns.Contains("Status") Then
-                dgvStockTrans.Columns("Status").HeaderText = "Trạng thái"
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Không thể tải giao dịch kho: " & ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+                                                      If dgvStockTrans.Columns.Contains("PhoneName") Then
+                                                          dgvStockTrans.Columns("PhoneName").HeaderText = "Tên sản phẩm"
+                                                      End If
+                                                      If dgvStockTrans.Columns.Contains("UserName") Then
+                                                          dgvStockTrans.Columns("UserName").HeaderText = "Người yêu cầu"
+                                                      End If
+                                                      If dgvStockTrans.Columns.Contains("Quantity") Then
+                                                          dgvStockTrans.Columns("Quantity").HeaderText = "Số lượng"
+                                                      End If
+                                                      If dgvStockTrans.Columns.Contains("TransactionType") Then
+                                                          dgvStockTrans.Columns("TransactionType").HeaderText = "Kiểu"
+                                                      End If
+                                                      If dgvStockTrans.Columns.Contains("Status") Then
+                                                          dgvStockTrans.Columns("Status").HeaderText = "Trạng thái"
+                                                      End If
+                                                  End If
+                                              End Sub
+        worker.RunWorkerAsync()
     End Sub
 
     Private Sub cboQuantity_SelectedChanged(sender As Object, e As EventArgs) Handles cboQuantity.SelectedValueChanged
@@ -152,7 +159,7 @@
                 Throw New Exception("Giao dịch không hợp lệ")
             End If
 
-            Dim detailForm As New StockTransDetailForm()
+            Dim detailForm As New StockTransDetailForm(txDto)
             detailForm.ShowDialog()
         Catch ex As Exception
             MessageBox.Show("Không thể xem chi tiết: " & ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
