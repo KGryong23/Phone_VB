@@ -2,9 +2,11 @@ Public Class PermissionService
     Implements IPermissionService
 
     Private ReadOnly permissionRepo As IPermissionRepository
+    Private ReadOnly socketClient As PermissionSocketClient
 
     Public Sub New(permissionRepo As IPermissionRepository)
         Me.permissionRepo = permissionRepo
+        Me.socketClient = PermissionSocketClient.Instance
     End Sub
 
     Public Function GetPagedByRole(roleId As Integer, query As BaseQuery) As PagedResult(Of PermissionDto) Implements IPermissionService.GetPagedByRole
@@ -14,11 +16,40 @@ Public Class PermissionService
     End Function
 
     Public Function AddPermissionsToRole(roleId As Integer, permissionIds As List(Of Integer)) As Boolean Implements IPermissionService.AddPermissionsToRole
-        Return permissionRepo.AddPermissionsToRole(roleId, permissionIds)
+        Dim result = permissionRepo.AddPermissionsToRole(roleId, permissionIds)
+
+        ' Gửi thông báo socket nếu thành công
+        If result Then
+            Try
+                Debug.WriteLine("About to send socket notification for role: " + roleId.ToString())
+                socketClient.CheckConnectionStatus()
+                
+                ' Test server echo first
+                socketClient.TestServerEcho()
+                
+                ' Then send the actual permission changed message
+                socketClient.SendRolePermissionChangedAsync(roleId)
+            Catch ex As Exception
+                Debug.WriteLine($"Failed to send socket notification: {ex.Message}")
+            End Try
+        End If
+
+        Return result
     End Function
 
     Public Function RemovePermissionFromRole(roleId As Integer, permissionId As Integer) As Boolean Implements IPermissionService.RemovePermissionFromRole
-        Return permissionRepo.RemovePermissionFromRole(roleId, permissionId)
+        Dim result = permissionRepo.RemovePermissionFromRole(roleId, permissionId)
+
+        ' Gửi thông báo socket nếu thành công
+        If result Then
+            Try
+                socketClient.SendRolePermissionChangedAsync(roleId)
+            Catch ex As Exception
+                Debug.WriteLine($"Failed to send socket notification: {ex.Message}")
+            End Try
+        End If
+
+        Return result
     End Function
 
     Public Function GetUnassignedPermissions(roleId As Integer) As List(Of PermissionDto) Implements IPermissionService.GetUnassignedPermissions

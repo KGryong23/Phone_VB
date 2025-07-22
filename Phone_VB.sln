@@ -1,9 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36109.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Phone_VB", "Phone_VB\Phone_VB.vbproj", "{9179B49E-4EE8-4B78-8079-82D7F88215AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneSocketServer", "PhoneSocketServer\PhoneSocketServer.csproj", "{3D2A20DB-A29B-43F5-B951-AD0047A74B68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{9179B49E-4EE8-4B78-8079-82D7F88215AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9179B49E-4EE8-4B78-8079-82D7F88215AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9179B49E-4EE8-4B78-8079-82D7F88215AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D2A20DB-A29B-43F5-B951-AD0047A74B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D2A20DB-A29B-43F5-B951-AD0047A74B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D2A20DB-A29B-43F5-B951-AD0047A74B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D2A20DB-A29B-43F5-B951-AD0047A74B68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

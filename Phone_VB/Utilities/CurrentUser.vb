@@ -46,4 +46,9 @@
     Public Shared Function HasPermission(permissionName As String) As Boolean
         Return _permissionNames IsNot Nothing AndAlso _permissionNames.Contains(permissionName)
     End Function
+
+    ' Cập nhật quyền user khi có thay đổi từ socket
+    Public Shared Sub RefreshPermissions(newPermissions As HashSet(Of String))
+        _permissionNames = newPermissions
+    End Sub
 End Class

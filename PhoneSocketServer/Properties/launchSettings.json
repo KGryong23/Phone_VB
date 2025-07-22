@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PhoneSocketServer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:65236;http://localhost:65237"
+    }
+  }
+}
