@@ -56,10 +56,13 @@
 
     Private Sub OnUserForceLoggedOut(reason As String)
         Try
-            ' Thông báo cho user
-            MessageBox.Show($"You have been logged out. Reason: {reason}", "Force Logout", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            ' Hiển thị thông báo lý do bị force logout
+            MessageBox.Show(reason, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' Clear current user và chuyển về login form
+            ' Đóng tất cả form con đang mở
+            CloseAllChildForms()
+
+            ' Clear current user
             CurrentUser.ClearUser()
 
             ' Đóng socket connection
@@ -67,10 +70,9 @@
                 socketClient.Disconnect()
             End If
 
-            ' Chuyển về login form
-            Dim loginForm As New LoginForm()
-            loginForm.Show()
-            Me.Hide()
+            ' Tắt toàn bộ ứng dụng
+            Application.Exit()
+
         Catch ex As Exception
             Debug.WriteLine($"Error handling force logout: {ex.Message}")
         End Try

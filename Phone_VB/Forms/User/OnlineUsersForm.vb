@@ -1,10 +1,12 @@
 Public Class OnlineUsersForm
     Private socketClient As PermissionSocketClient
     Private onlineUsers As List(Of OnlineUser)
+    Private filteredUsers As List(Of OnlineUser)
 
     Public Sub New()
         InitializeComponent()
         onlineUsers = New List(Of OnlineUser)()
+        filteredUsers = New List(Of OnlineUser)()
         socketClient = PermissionSocketClient.Instance
     End Sub
 
@@ -25,7 +27,7 @@ Public Class OnlineUsersForm
             SetupDataGridView()
 
         Catch ex As Exception
-            MessageBox.Show("Failed to load online users: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Không thể tải danh sách người dùng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -34,98 +36,116 @@ Public Class OnlineUsersForm
         dgvOnlineUsers.Columns.Clear()
         dgvOnlineUsers.AutoGenerateColumns = False
 
-        ' Add columns
+        ' Add columns with Vietnamese headers
         dgvOnlineUsers.Columns.Add(New DataGridViewTextBoxColumn With {
             .Name = "UserId",
-            .HeaderText = "User ID",
+            .HeaderText = "ID",
             .DataPropertyName = "UserId",
-            .Width = 80
+            .Width = 60
         })
 
         dgvOnlineUsers.Columns.Add(New DataGridViewTextBoxColumn With {
             .Name = "Username",
-            .HeaderText = "Username",
+            .HeaderText = "Tên đăng nhập",
             .DataPropertyName = "Username",
-            .Width = 150
+            .Width = 200
         })
 
         dgvOnlineUsers.Columns.Add(New DataGridViewTextBoxColumn With {
             .Name = "ConnectedAt",
-            .HeaderText = "Connected At",
+            .HeaderText = "Thời gian kết nối",
             .DataPropertyName = "ConnectedAt",
-            .Width = 140
+            .Width = 150
         })
 
-        ' Add Force Logout button column
-        Dim btnColumn As New DataGridViewButtonColumn()
-        btnColumn.Name = "ForceLogout"
-        btnColumn.HeaderText = "Actions"
-        btnColumn.Text = "Force Logout"
-        btnColumn.UseColumnTextForButtonValue = True
-        btnColumn.Width = 100
-        dgvOnlineUsers.Columns.Add(btnColumn)
+        ' Set font for DataGridView
+        dgvOnlineUsers.DefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        dgvOnlineUsers.ColumnHeadersDefaultCellStyle.Font = New System.Drawing.Font("Segoe UI", 10.0!, FontStyle.Bold)
     End Sub
 
     Private Sub OnOnlineUsersUpdated(users As List(Of OnlineUser))
         Try
             onlineUsers = users
-            RefreshGrid()
+            FilterAndRefreshGrid()
         Catch ex As Exception
             Debug.WriteLine("Error updating online users: " + ex.Message)
         End Try
     End Sub
 
-    Private Sub RefreshGrid()
+    Private Sub FilterAndRefreshGrid()
+        Dim searchText = txtSearch.Text.Trim().ToLower()
+
+        If String.IsNullOrEmpty(searchText) Then
+            filteredUsers = onlineUsers
+        Else
+            filteredUsers = onlineUsers.Where(Function(u) u.Username.ToLower().Contains(searchText)).ToList()
+        End If
+
         dgvOnlineUsers.DataSource = Nothing
-        dgvOnlineUsers.DataSource = onlineUsers
+        dgvOnlineUsers.DataSource = filteredUsers
         dgvOnlineUsers.Refresh()
 
         ' Update status label
-        lblStatus.Text = "Total Online Users: " + onlineUsers.Count.ToString()
+        lblStatus.Text = $"Tổng số người dùng online: {onlineUsers.Count} | Hiển thị: {filteredUsers.Count}"
     End Sub
 
-    Private Sub dgvOnlineUsers_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvOnlineUsers.CellClick
-        Try
-            ' Check if clicked on Force Logout button
-            If e.ColumnIndex = dgvOnlineUsers.Columns("ForceLogout").Index AndAlso e.RowIndex >= 0 Then
-                Dim selectedUser = CType(dgvOnlineUsers.Rows(e.RowIndex).DataBoundItem, OnlineUser)
-                
-                ' Confirm force logout
-                Dim result = MessageBox.Show("Are you sure you want to force logout user '" + selectedUser.Username + "'?", 
-                                           "Confirm Force Logout", 
-                                           MessageBoxButtons.YesNo, 
-                                           MessageBoxIcon.Question)
-                
-                If result = DialogResult.Yes Then
-                    ForceLogoutUser(selectedUser.UserId, "Forced logout by administrator")
-                End If
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Error handling cell click: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub ForceLogoutUser(userId As Integer, reason As String)
-        Try
-            socketClient.ForceLogoutUserAsync(userId, reason)
-            MessageBox.Show("Force logout command sent successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            
-            ' Refresh online users list
-            socketClient.RequestOnlineUsersAsync()
-            
-        Catch ex As Exception
-            MessageBox.Show("Failed to force logout user: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        FilterAndRefreshGrid()
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         Try
             socketClient.RequestOnlineUsersAsync()
         Catch ex As Exception
-            MessageBox.Show("Failed to refresh online users: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Không thể làm mới danh sách: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
+    Private Sub btnForceLogout_Click(sender As Object, e As EventArgs) Handles btnForceLogout.Click
+        Try
+            If dgvOnlineUsers.SelectedRows.Count = 0 Then
+                MessageBox.Show("Vui lòng chọn một người dùng để đăng xuất.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
+
+            Dim selectedUser = CType(dgvOnlineUsers.SelectedRows(0).DataBoundItem, OnlineUser)
+
+            ' Kiểm tra xem có phải admin đang đăng xuất chính mình không
+            If CurrentUser.UserId.HasValue AndAlso CurrentUser.UserId.Value = selectedUser.UserId Then
+                Dim selfLogoutResult = MessageBox.Show("Bạn có chắc muốn đăng xuất chính mình không?",
+                                                     "Xác nhận đăng xuất",
+                                                     MessageBoxButtons.YesNo,
+                                                     MessageBoxIcon.Question)
+                If selfLogoutResult = DialogResult.Yes Then
+                    ForceLogoutUser(selectedUser.UserId, "Tự đăng xuất bởi quản trị viên")
+                End If
+            Else
+                ' Confirm force logout user khác
+                Dim result = MessageBox.Show($"Bạn có chắc muốn đăng xuất người dùng '{selectedUser.Username}' không?",
+                                           "Xác nhận đăng xuất",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question)
+
+                If result = DialogResult.Yes Then
+                    ForceLogoutUser(selectedUser.UserId, "Đăng xuất bởi quản trị viên")
+                End If
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Không thể đăng xuất người dùng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub ForceLogoutUser(userId As Integer, reason As String)
+        Try
+            socketClient.ForceLogoutUserAsync(userId, reason)
+
+            ' Refresh online users list
+            socketClient.RequestOnlineUsersAsync()
+
+        Catch ex As Exception
+            MessageBox.Show("Không thể đăng xuất người dùng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
     Private Sub OnlineUsersForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         ' Remove event handler
         If socketClient IsNot Nothing Then

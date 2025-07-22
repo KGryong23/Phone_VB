@@ -49,7 +49,7 @@ Public Class PermissionSocketClient
         End Get
     End Property
 
-    Public Sub ConnectAsync()
+    Public Function Connect() As Boolean
         Try
             ' Kết nối TCP tới server
             _tcpClient.Connect(SERVER_HOST, SERVER_PORT)
@@ -68,10 +68,16 @@ Public Class PermissionSocketClient
             _healthCheckTimer.Enabled = True
 
             Debug.WriteLine("Connected to socket server via TCP")
+            Return True
         Catch ex As Exception
             Debug.WriteLine("Failed to connect to server: " + ex.Message)
             _isConnected = False
+            Return False
         End Try
+    End Function
+
+    Public Sub ConnectAsync()
+        Connect()
     End Sub
 
     Public Sub RegisterUserAsync(userId As Integer, roleId As Integer)
@@ -284,6 +290,7 @@ Public Class PermissionSocketClient
     Private Sub ProcessMessage(message As SocketMessage)
         Try
             Debug.WriteLine("Processing message type: " + message.Type)
+            Debug.WriteLine("Processing message data: " + If(message.Data IsNot Nothing, message.Data.ToString(), "null"))
 
             Select Case message.Type
                 Case SocketMessageTypes.UserConnected
@@ -314,7 +321,7 @@ Public Class PermissionSocketClient
             Debug.WriteLine("Message data type: " + message.Data.GetType().ToString())
 
             Dim roleId As Integer = 0
-            
+
             ' message.Data có thể là Dictionary hoặc RolePermissionData object
             If TypeOf message.Data Is Dictionary(Of String, Object) Then
                 Dim dict = DirectCast(message.Data, Dictionary(Of String, Object))
@@ -340,23 +347,23 @@ Public Class PermissionSocketClient
             ' Check if current user is affected
             If _currentRoleId.HasValue AndAlso _currentRoleId.Value = roleId Then
                 Debug.WriteLine("Current user is affected, refreshing permissions")
-                
+
                 ' Refresh permissions from database
                 RefreshCurrentUserPermissions()
 
                 ' Always redirect to Home and update UI, but only show notification if from another user
                 Debug.WriteLine("Skip flag status: " + _skipNextPermissionNotification.ToString())
-                
+
                 ' Always raise event for UI updates and redirect
                 Debug.WriteLine("About to raise PermissionsChanged event...")
                 Dim mainForm = GetMainForm()
                 If mainForm IsNot Nothing Then
                     Debug.WriteLine("MainForm found, invoking event...")
                     If mainForm.InvokeRequired Then
-                        Dim handler As New PermissionEventHandler(Sub(id As Integer) 
-                            Debug.WriteLine("Event handler executing on UI thread...")
-                            RaiseEvent PermissionsChanged(id)
-                        End Sub)
+                        Dim handler As New PermissionEventHandler(Sub(id As Integer)
+                                                                      Debug.WriteLine("Event handler executing on UI thread...")
+                                                                      RaiseEvent PermissionsChanged(id)
+                                                                  End Sub)
                         mainForm.Invoke(handler, roleId)
                     Else
                         Debug.WriteLine("Event handler executing directly...")
@@ -366,7 +373,7 @@ Public Class PermissionSocketClient
                 Else
                     Debug.WriteLine("ERROR: MainForm not found!")
                 End If
-                
+
                 ' Reset skip flag after processing
                 If _skipNextPermissionNotification Then
                     Debug.WriteLine("Resetting skip flag after processing")
@@ -383,43 +390,68 @@ Public Class PermissionSocketClient
 
     Private Sub HandleUserForceLogout(message As SocketMessage)
         Try
+            Debug.WriteLine("HandleUserForceLogout called")
+            Debug.WriteLine("Message data type: " + If(message.Data IsNot Nothing, message.Data.GetType().ToString(), "null"))
+            Debug.WriteLine("Current user ID: " + If(_currentUserId.HasValue, _currentUserId.Value.ToString(), "null"))
+
             Dim userId As Integer = 0
             Dim reason As String = ""
 
             ' Handle different data types
             If TypeOf message.Data Is Dictionary(Of String, Object) Then
                 Dim dict = DirectCast(message.Data, Dictionary(Of String, Object))
+                Debug.WriteLine("Data is Dictionary with " + dict.Keys.Count.ToString() + " keys")
                 If dict.ContainsKey("UserId") Then
                     userId = Convert.ToInt32(dict("UserId"))
+                    Debug.WriteLine("Extracted UserId from dictionary: " + userId.ToString())
                 End If
                 If dict.ContainsKey("Reason") Then
                     reason = dict("Reason").ToString()
+                    Debug.WriteLine("Extracted Reason from dictionary: " + reason)
                 End If
             Else
                 ' Fallback: serialize and deserialize
+                Debug.WriteLine("Using fallback serialization method")
                 Dim json = _serializer.Serialize(message.Data)
+                Debug.WriteLine("Serialized data: " + json)
                 Dim logoutData = _serializer.Deserialize(Of ForceLogoutData)(json)
                 If logoutData IsNot Nothing Then
                     userId = logoutData.UserId
                     reason = logoutData.Reason
+                    Debug.WriteLine("Extracted from deserialized object - UserId: " + userId.ToString() + ", Reason: " + reason)
                 End If
             End If
 
+            Debug.WriteLine("Final extracted - UserId: " + userId.ToString() + ", Reason: " + reason)
+
             ' Check if current user should be logged out
             If _currentUserId.HasValue AndAlso _currentUserId.Value = userId Then
+                Debug.WriteLine("Current user matches logout target - raising UserForceLoggedOut event")
+
                 ' Raise event on UI thread
                 Dim mainForm = GetMainForm()
                 If mainForm IsNot Nothing Then
+                    Debug.WriteLine("MainForm found, invoking event on UI thread")
                     If mainForm.InvokeRequired Then
-                        Dim handler As New LogoutEventHandler(Sub(r As String) RaiseEvent UserForceLoggedOut(r))
+                        Dim handler As New LogoutEventHandler(Sub(r As String)
+                                                                  Debug.WriteLine("Event handler executing on UI thread with reason: " + r)
+                                                                  RaiseEvent UserForceLoggedOut(r)
+                                                              End Sub)
                         mainForm.Invoke(handler, reason)
                     Else
+                        Debug.WriteLine("Event handler executing directly with reason: " + reason)
                         RaiseEvent UserForceLoggedOut(reason)
                     End If
+                    Debug.WriteLine("UserForceLoggedOut event raised successfully")
+                Else
+                    Debug.WriteLine("ERROR: MainForm not found!")
                 End If
+            Else
+                Debug.WriteLine("Current user does NOT match logout target - ignoring")
             End If
         Catch ex As Exception
             Debug.WriteLine("Error handling force logout: " + ex.Message)
+            Debug.WriteLine("Stack trace: " + ex.StackTrace)
         End Try
     End Sub
 

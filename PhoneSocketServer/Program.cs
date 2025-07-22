@@ -47,54 +47,6 @@ app.Map("/socket", async (HttpContext context, WebSocketServer socketServer) =>
 // Health check endpoint
 app.MapGet("/health", () => "Phone Socket Server is running");
 
-// HTTP Polling endpoints for VB.NET compatibility
-app.MapPost("/api/register", async (RegisterRequest request, ClientManager clientManager) =>
-{
-    var connectionId = Guid.NewGuid().ToString();
-    var client = new ConnectedClient
-    {
-        ConnectionId = connectionId,
-        UserId = request.UserId,
-        Username = request.Username,
-        RoleId = request.RoleId,
-        ConnectedAt = DateTime.UtcNow
-    };
-    
-    clientManager.AddClient(client);
-    Log.Information("User {Username} (ID: {UserId}) registered via HTTP", request.Username, request.UserId);
-    return Results.Ok(new { ConnectionId = connectionId });
-});
-
-app.MapPost("/api/role-permission-changed", async (RolePermissionRequest request, MessageHandler messageHandler) =>
-{
-    await messageHandler.BroadcastRolePermissionChanged(request.RoleId);
-    return Results.Ok();
-});
-
-app.MapPost("/api/force-logout", async (ForceLogoutRequest request, MessageHandler messageHandler) =>
-{
-    await messageHandler.ForceLogoutUser(request.UserId, request.Reason);
-    return Results.Ok();
-});
-
-app.MapGet("/api/online-users", (ClientManager clientManager) =>
-{
-    var users = clientManager.GetAllClients().Select(c => new
-    {
-        c.UserId,
-        c.Username,
-        c.RoleId,
-        ConnectedAt = c.ConnectedAt.ToString("yyyy-MM-dd HH:mm:ss")
-    });
-    return Results.Ok(users);
-});
-
-app.MapGet("/api/messages/{userId:int}", (int userId, MessageHandler messageHandler) =>
-{
-    var messages = messageHandler.GetPendingMessages(userId);
-    return Results.Ok(messages);
-});
-
 // Get online users endpoint (for monitoring)
 app.MapGet("/users", (ClientManager clientManager) => 
 {
@@ -122,7 +74,8 @@ var port = socketServerConfig.GetValue<int>("Port", 8080);
 Log.Information("Starting Phone Socket Server on {Host}:{Port}", host, port);
 Console.WriteLine($"🚀 Phone Socket Server starting on {host}:{port}");
 Console.WriteLine($"📡 WebSocket endpoint: ws://{host}:{port}/socket");
-Console.WriteLine($"🔍 Health check: http://{host}:{port}/health");
+Console.WriteLine($"� TCP Socket Server: {host}:8081");
+Console.WriteLine($"�🔍 Health check: http://{host}:{port}/health");
 Console.WriteLine($"👥 Online users: http://{host}:{port}/users");
 Console.WriteLine($"📊 Stats: http://{host}:{port}/stats");
 Console.WriteLine("Press Ctrl+C to stop the server");

@@ -117,10 +117,27 @@ public class MessageHandler
         _logger.LogInformation("Force logout user: UserId={UserId}, Reason={Reason}", 
             logoutData.UserId, logoutData.Reason);
 
-        // Send logout message to specific user
-        if (_webSocketServer != null)
+        // Find the client to logout
+        var targetClient = _clientManager.GetClient(logoutData.UserId);
+        if (targetClient != null)
         {
-            await _webSocketServer.SendToUserAsync(logoutData.UserId, message);
+            // Send logout message to specific user via WebSocket
+            if (_webSocketServer != null)
+            {
+                await _webSocketServer.SendToUserAsync(logoutData.UserId, message);
+            }
+
+            // Send logout message to specific user via TCP
+            if (_tcpSocketServer != null)
+            {
+                await _tcpSocketServer.SendMessageToClientAsync(targetClient, message);
+            }
+
+            _logger.LogInformation("Force logout message sent to user {UserId} via both WebSocket and TCP", logoutData.UserId);
+        }
+        else
+        {
+            _logger.LogWarning("User {UserId} not found for force logout", logoutData.UserId);
         }
 
         return null;
