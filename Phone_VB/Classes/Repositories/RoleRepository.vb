@@ -98,6 +98,22 @@ Public Class RoleRepository
         Return Nothing
     End Function
 
+    Public Function GetAll() As List(Of Role) Implements IRoleRepository.GetAll
+        Dim result As New List(Of Role)()
+        Using conn As New OdbcConnection(connStr)
+            conn.Open()
+            Dim query As String = "SELECT * FROM roles ORDER BY id DESC"
+            Using cmd As New OdbcCommand(query, conn)
+                Using reader As OdbcDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        result.Add(MapToRole(reader))
+                    End While
+                End Using
+            End Using
+        End Using
+        Return result
+    End Function
+
     Private Function MapToRole(reader As OdbcDataReader) As Role
         Dim role As New Role()
         role.Id = reader.GetInt32(reader.GetOrdinal("id"))

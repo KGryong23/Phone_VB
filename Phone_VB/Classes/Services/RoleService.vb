@@ -43,6 +43,15 @@
         Return MapToDto(role)
     End Function
 
+    Public Function GetAll() As List(Of RoleDto) Implements IRoleService.GetAll
+        Dim roles = roleRepo.GetAll()
+        Dim dtos As New List(Of RoleDto)
+        For Each r In roles
+            dtos.Add(MapToDto(r))
+        Next
+        Return dtos
+    End Function
+
     Private Function MapToDto(role As Role) As RoleDto
         Return New RoleDto With {
             .Id = role.Id,

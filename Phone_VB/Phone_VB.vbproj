@@ -106,7 +106,9 @@
     <Compile Include="Classes\Dtos\RoleDto.vb" />
     <Compile Include="Classes\Dtos\RoleUpdateRequest.vb" />
     <Compile Include="Classes\Dtos\UpdatePhoneRequest.vb" />
+    <Compile Include="Classes\Dtos\UserCreateRequest.vb" />
     <Compile Include="Classes\Dtos\UserDto.vb" />
+    <Compile Include="Classes\Dtos\UserUpdateRequest.vb" />
     <Compile Include="Classes\Models\Permission.vb" />
     <Compile Include="Classes\Models\Role.vb" />
     <Compile Include="Classes\Models\StockTransaction.vb" />
@@ -223,6 +225,18 @@
     <Compile Include="Forms\User\OnlineUsersForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\User\UserForm.Designer.vb">
+      <DependentUpon>UserForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\User\UserForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\User\UserInputForm.Designer.vb">
+      <DependentUpon>UserInputForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\User\UserInputForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -287,6 +301,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\User\OnlineUsersForm.resx">
       <DependentUpon>OnlineUsersForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\User\UserForm.resx">
+      <DependentUpon>UserForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\User\UserInputForm.resx">
+      <DependentUpon>UserInputForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

@@ -165,7 +165,11 @@
     End Sub
 
     Private Sub btnUserTransfer_Click(sender As Object, e As EventArgs) Handles btnUserTransfer.Click
-        ' Mở form quản lý online users
+        Dim userForm As New UserForm()
+        ShowFormInContentPanel(userForm)
+    End Sub
+
+    Private Sub btnSessionTransfer_Click(sender As Object, e As EventArgs) Handles btnSessionTransfer.Click
         Dim onlineUsersForm As New OnlineUsersForm()
         ShowFormInContentPanel(onlineUsersForm)
     End Sub

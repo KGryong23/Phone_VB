@@ -4,4 +4,5 @@
     Function Update(role As Role) As Boolean
     Function Delete(id As Integer) As Boolean
     Function GetById(id As Integer) As Role
+    Function GetAll() As List(Of Role) ' Thêm dòng này
 End Interface

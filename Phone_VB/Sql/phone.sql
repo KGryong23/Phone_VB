@@ -96,6 +96,19 @@ VALUES
 -- Normal user
 ('sync', '1232003', 2, NOW(), NOW());
 
+INSERT INTO role_permissions (role_id, permission_id)
+VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10);
+
 CREATE PROCEDURE upsert_phone (
     IN p_id INT,
     IN p_model VARCHAR(255),
