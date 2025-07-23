@@ -12,6 +12,11 @@ Public Class ForceLogoutData
     Public Property Reason As String = String.Empty
 End Class
 
+Public Class UserRoleChangeData
+    Public Property UserId As Integer
+    Public Property NewRoleId As Integer
+End Class
+
 Public Class UserConnectionData
     Public Property UserId As Integer
     Public Property Username As String = String.Empty

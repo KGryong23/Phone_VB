@@ -86,7 +86,7 @@ Public Class OnlineUsersForm
         dgvOnlineUsers.Refresh()
 
         ' Update status label
-        lblStatus.Text = $"Tổng số người dùng online: {onlineUsers.Count} | Hiển thị: {filteredUsers.Count}"
+        lblStatus.Text = "Tổng số người dùng online: " + onlineUsers.Count.ToString() + " | Hiển thị: " + filteredUsers.Count.ToString()
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
@@ -94,8 +94,13 @@ Public Class OnlineUsersForm
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
+        RefreshOnlineUsersList()
+    End Sub
+
+    Private Sub RefreshOnlineUsersList()
         Try
             socketClient.RequestOnlineUsersAsync()
+            Debug.WriteLine("Refreshing online users list...")
         Catch ex As Exception
             MessageBox.Show("Không thể làm mới danh sách: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -121,7 +126,7 @@ Public Class OnlineUsersForm
                 End If
             Else
                 ' Confirm force logout user khác
-                Dim result = MessageBox.Show($"Bạn có chắc muốn đăng xuất người dùng '{selectedUser.Username}' không?",
+                Dim result = MessageBox.Show("Bạn có chắc muốn đăng xuất người dùng '" + selectedUser.Username + "' không?",
                                            "Xác nhận đăng xuất",
                                            MessageBoxButtons.YesNo,
                                            MessageBoxIcon.Question)
@@ -139,8 +144,14 @@ Public Class OnlineUsersForm
         Try
             socketClient.ForceLogoutUserAsync(userId, reason)
 
+            ' Delay nhỏ để server xử lý logout trước khi refresh
+            System.Threading.Thread.Sleep(500)
+
             ' Refresh online users list
-            socketClient.RequestOnlineUsersAsync()
+            RefreshOnlineUsersList()
+
+            ' Optional: Hiển thị thông báo thành công
+            Debug.WriteLine("Force logout user successful, refreshing online users list")
 
         Catch ex As Exception
             MessageBox.Show("Không thể đăng xuất người dùng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)

@@ -6,6 +6,7 @@
     delete_phone
     view_stocktrans
     view_roles
+    view_sessions
     view_users
     import_stock
     export_stock

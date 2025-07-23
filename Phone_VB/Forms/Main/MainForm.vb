@@ -7,7 +7,6 @@
 
         Dim homeForm As New HomeForm()
         ShowFormInContentPanel(homeForm)
-
         ' Ẩn nút nếu không có quyền
         UpdateUIBasedOnPermissions()
     End Sub
@@ -30,7 +29,7 @@
             End If
 
         Catch ex As Exception
-            Debug.WriteLine($"Failed to initialize socket client: {ex.Message}")
+            Debug.WriteLine("Failed to initialize socket client: " + ex.Message)
         End Try
     End Sub
 
@@ -50,14 +49,22 @@
 
             Debug.WriteLine("=== OnPermissionsChanged completed ===")
         Catch ex As Exception
-            Debug.WriteLine($"Error handling permissions changed: {ex.Message}")
+            Debug.WriteLine("Error handling permissions changed: " + ex.Message)
         End Try
     End Sub
 
     Private Sub OnUserForceLoggedOut(reason As String)
         Try
-            ' Hiển thị thông báo lý do bị force logout
-            MessageBox.Show(reason, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ' Đưa form lên foreground để user biết là đang bị logout
+            Me.WindowState = FormWindowState.Normal
+            Me.BringToFront()
+            Me.TopMost = True
+            Me.Focus()
+            Me.Activate()
+            Me.TopMost = False
+
+            ' Log lý do logout cho debugging
+            Debug.WriteLine("User force logged out: " + reason)
 
             ' Đóng tất cả form con đang mở
             CloseAllChildForms()
@@ -70,20 +77,42 @@
                 socketClient.Disconnect()
             End If
 
-            ' Tắt toàn bộ ứng dụng
-            Application.Exit()
+            ' Ẩn MainForm thay vì đóng
+            Me.Hide()
+
+            ' Tìm LoginForm gốc (main form của application)
+            Dim loginForm As LoginForm = Nothing
+            For Each form As Form In Application.OpenForms
+                If TypeOf form Is LoginForm Then
+                    loginForm = DirectCast(form, LoginForm)
+                    Exit For
+                End If
+            Next
+
+            ' Nếu tìm thấy LoginForm gốc, hiển thị lại
+            If loginForm IsNot Nothing Then
+                loginForm.Show()
+                loginForm.WindowState = FormWindowState.Normal
+                loginForm.BringToFront()
+                loginForm.ResetForm() ' Reset form về trạng thái ban đầu
+            Else
+                ' Nếu không tìm thấy LoginForm gốc, có thể là lỗi nghiêm trọng
+                ' Tắt toàn bộ application để tránh process chạy ngầm
+                Debug.WriteLine("ERROR: LoginForm gốc không tìm thấy! Đang tắt application...")
+                Application.Exit()
+            End If
 
         Catch ex As Exception
-            Debug.WriteLine($"Error handling force logout: {ex.Message}")
+            Debug.WriteLine("Error handling force logout: " + ex.Message)
         End Try
     End Sub
 
     Private Sub OnOnlineUsersUpdated(onlineUsers As List(Of OnlineUser))
         Try
-            Debug.WriteLine($"Online users updated: {onlineUsers.Count} users online")
+            Debug.WriteLine("Online users updated: " + onlineUsers.Count.ToString() + " users online")
             ' TODO: Update online users display if needed
         Catch ex As Exception
-            Debug.WriteLine($"Error handling online users update: {ex.Message}")
+            Debug.WriteLine("Error handling online users update: " + ex.Message)
         End Try
     End Sub
 
@@ -93,12 +122,36 @@
         btnStockTransfer.Visible = CurrentUser.HasPermission("view_stocktrans")
         btnRoleTransfer.Visible = CurrentUser.HasPermission("view_roles")
         btnUserTransfer.Visible = CurrentUser.HasPermission("view_users")
+        btnSessionTransfer.Visible = CurrentUser.HasPermission("view_sessions")
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         ' Đóng socket connection khi đóng form
         If socketClient IsNot Nothing Then
             socketClient.Disconnect()
+        End If
+
+        ' Clear current user khi đóng MainForm
+        CurrentUser.ClearUser()
+
+        ' Tìm LoginForm gốc và hiển thị lại thay vì để application chạy ngầm
+        Dim loginForm As LoginForm = Nothing
+        For Each form As Form In Application.OpenForms
+            If TypeOf form Is LoginForm Then
+                loginForm = DirectCast(form, LoginForm)
+                Exit For
+            End If
+        Next
+
+        ' Nếu tìm thấy LoginForm gốc, hiển thị lại
+        If loginForm IsNot Nothing Then
+            loginForm.Show()
+            loginForm.WindowState = FormWindowState.Normal
+            loginForm.BringToFront()
+            loginForm.ResetForm()
+        Else
+            ' Nếu không tìm thấy LoginForm gốc, tắt application
+            Application.Exit()
         End If
     End Sub
 
@@ -134,13 +187,13 @@
 
             ' Đóng tất cả form đã tìm được
             For Each form In formsToClose
-                Debug.WriteLine($"Closing form: {form.GetType().Name}")
+                Debug.WriteLine("Closing form: " + form.GetType().Name)
                 form.Close()
             Next
 
-            Debug.WriteLine($"Closed {formsToClose.Count} child forms")
+            Debug.WriteLine("Closed " + formsToClose.Count.ToString() + " child forms")
         Catch ex As Exception
-            Debug.WriteLine($"Error closing child forms: {ex.Message}")
+            Debug.WriteLine("Error closing child forms: " + ex.Message)
         End Try
     End Sub
 
@@ -172,5 +225,48 @@
     Private Sub btnSessionTransfer_Click(sender As Object, e As EventArgs) Handles btnSessionTransfer.Click
         Dim onlineUsersForm As New OnlineUsersForm()
         ShowFormInContentPanel(onlineUsersForm)
+    End Sub
+
+    Private Sub btnLogOut_Click(sender As Object, e As EventArgs) Handles btnLogOut.Click
+        Try
+            ' Đóng tất cả form con đang mở
+            CloseAllChildForms()
+
+            ' Clear current user
+            CurrentUser.ClearUser()
+
+            ' Đóng socket connection
+            If socketClient IsNot Nothing Then
+                socketClient.Disconnect()
+            End If
+
+            ' Ẩn MainForm thay vì đóng
+            Me.Hide()
+
+            ' Tìm LoginForm gốc (main form của application)
+            Dim loginForm As LoginForm = Nothing
+            For Each form As Form In Application.OpenForms
+                If TypeOf form Is LoginForm Then
+                    loginForm = DirectCast(form, LoginForm)
+                    Exit For
+                End If
+            Next
+
+            ' Nếu tìm thấy LoginForm gốc, hiển thị lại
+            If loginForm IsNot Nothing Then
+                loginForm.Show()
+                loginForm.WindowState = FormWindowState.Normal
+                loginForm.BringToFront()
+                loginForm.ResetForm() ' Reset form về trạng thái ban đầu
+            Else
+                ' Nếu không tìm thấy LoginForm gốc, có thể là lỗi nghiêm trọng
+                ' Tắt toàn bộ application để tránh process chạy ngầm
+                Debug.WriteLine("ERROR: LoginForm gốc không tìm thấy! Đang tắt application...")
+                Application.Exit()
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("Error during logout: " + ex.Message)
+        End Try
     End Sub
 End Class

@@ -150,13 +150,13 @@
 
         Dim selectedUser = CType(dgvUsers.SelectedRows(0).DataBoundItem, UserDto)
 
-        If MessageBox.Show($"Bạn có chắc chắn muốn xóa người dùng '{selectedUser.Username}'?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+        If MessageBox.Show("Bạn có chắc chắn muốn xóa người dùng '" + selectedUser.Username + "'?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Try
                 userService.Delete(selectedUser.Id)
                 LoadUsers()
                 MessageBox.Show("Xóa người dùng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Catch ex As Exception
-                MessageBox.Show($"Lỗi khi xóa người dùng: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Lỗi khi xóa người dùng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End If
     End Sub

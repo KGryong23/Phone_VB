@@ -17,6 +17,12 @@ public class ForceLogoutData
     public string Reason { get; set; } = string.Empty;
 }
 
+public class UserRoleChangeData
+{
+    public int UserId { get; set; }
+    public int NewRoleId { get; set; }
+}
+
 public class UserConnectionData
 {
     public int UserId { get; set; }

@@ -25,6 +25,8 @@ Partial Class MainForm
         Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnLogOut = New System.Windows.Forms.Button()
+        Me.btnSessionTransfer = New System.Windows.Forms.Button()
         Me.btnUserTransfer = New System.Windows.Forms.Button()
         Me.btnRoleTransfer = New System.Windows.Forms.Button()
         Me.btnStockTransfer = New System.Windows.Forms.Button()
@@ -32,7 +34,6 @@ Partial Class MainForm
         Me.btnHomeTransfer = New System.Windows.Forms.Button()
         Me.pnlContent = New System.Windows.Forms.Panel()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
-        Me.btnSessionTransfer = New System.Windows.Forms.Button()
         Me.pnlHeader.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
@@ -65,6 +66,7 @@ Partial Class MainForm
         '
         Me.Panel1.BackColor = System.Drawing.Color.SlateGray
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel1.Controls.Add(Me.btnLogOut)
         Me.Panel1.Controls.Add(Me.btnSessionTransfer)
         Me.Panel1.Controls.Add(Me.btnUserTransfer)
         Me.Panel1.Controls.Add(Me.btnRoleTransfer)
@@ -78,14 +80,42 @@ Partial Class MainForm
         Me.Panel1.Size = New System.Drawing.Size(134, 370)
         Me.Panel1.TabIndex = 1
         '
+        'btnLogOut
+        '
+        Me.btnLogOut.BackColor = System.Drawing.Color.Brown
+        Me.btnLogOut.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.btnLogOut.FlatAppearance.BorderSize = 0
+        Me.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLogOut.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btnLogOut.Location = New System.Drawing.Point(0, 328)
+        Me.btnLogOut.Name = "btnLogOut"
+        Me.btnLogOut.Size = New System.Drawing.Size(132, 40)
+        Me.btnLogOut.TabIndex = 6
+        Me.btnLogOut.Text = "Đăng xuất"
+        Me.btnLogOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnLogOut.UseVisualStyleBackColor = False
+        '
+        'btnSessionTransfer
+        '
+        Me.btnSessionTransfer.Dock = System.Windows.Forms.DockStyle.Top
+        Me.btnSessionTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.btnSessionTransfer.Location = New System.Drawing.Point(0, 225)
+        Me.btnSessionTransfer.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnSessionTransfer.Name = "btnSessionTransfer"
+        Me.btnSessionTransfer.Size = New System.Drawing.Size(132, 45)
+        Me.btnSessionTransfer.TabIndex = 5
+        Me.btnSessionTransfer.Text = "Phiên đăng nhập"
+        Me.btnSessionTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnSessionTransfer.UseVisualStyleBackColor = True
+        '
         'btnUserTransfer
         '
         Me.btnUserTransfer.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnUserTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.btnUserTransfer.Location = New System.Drawing.Point(0, 191)
+        Me.btnUserTransfer.Location = New System.Drawing.Point(0, 180)
         Me.btnUserTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnUserTransfer.Name = "btnUserTransfer"
-        Me.btnUserTransfer.Size = New System.Drawing.Size(132, 51)
+        Me.btnUserTransfer.Size = New System.Drawing.Size(132, 45)
         Me.btnUserTransfer.TabIndex = 3
         Me.btnUserTransfer.Text = "Người dùng"
         Me.btnUserTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -95,10 +125,10 @@ Partial Class MainForm
         '
         Me.btnRoleTransfer.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnRoleTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.btnRoleTransfer.Location = New System.Drawing.Point(0, 143)
+        Me.btnRoleTransfer.Location = New System.Drawing.Point(0, 135)
         Me.btnRoleTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRoleTransfer.Name = "btnRoleTransfer"
-        Me.btnRoleTransfer.Size = New System.Drawing.Size(132, 48)
+        Me.btnRoleTransfer.Size = New System.Drawing.Size(132, 45)
         Me.btnRoleTransfer.TabIndex = 4
         Me.btnRoleTransfer.Text = "Vai trò"
         Me.btnRoleTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -108,10 +138,10 @@ Partial Class MainForm
         '
         Me.btnStockTransfer.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnStockTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.btnStockTransfer.Location = New System.Drawing.Point(0, 97)
+        Me.btnStockTransfer.Location = New System.Drawing.Point(0, 90)
         Me.btnStockTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnStockTransfer.Name = "btnStockTransfer"
-        Me.btnStockTransfer.Size = New System.Drawing.Size(132, 46)
+        Me.btnStockTransfer.Size = New System.Drawing.Size(132, 45)
         Me.btnStockTransfer.TabIndex = 2
         Me.btnStockTransfer.Text = "Xuất nhập kho"
         Me.btnStockTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -121,10 +151,10 @@ Partial Class MainForm
         '
         Me.btnPhoneTransfer.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnPhoneTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.btnPhoneTransfer.Location = New System.Drawing.Point(0, 48)
+        Me.btnPhoneTransfer.Location = New System.Drawing.Point(0, 45)
         Me.btnPhoneTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnPhoneTransfer.Name = "btnPhoneTransfer"
-        Me.btnPhoneTransfer.Size = New System.Drawing.Size(132, 49)
+        Me.btnPhoneTransfer.Size = New System.Drawing.Size(132, 45)
         Me.btnPhoneTransfer.TabIndex = 3
         Me.btnPhoneTransfer.Text = "Điện thoại"
         Me.btnPhoneTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -138,7 +168,7 @@ Partial Class MainForm
         Me.btnHomeTransfer.Location = New System.Drawing.Point(0, 0)
         Me.btnHomeTransfer.Margin = New System.Windows.Forms.Padding(2)
         Me.btnHomeTransfer.Name = "btnHomeTransfer"
-        Me.btnHomeTransfer.Size = New System.Drawing.Size(132, 48)
+        Me.btnHomeTransfer.Size = New System.Drawing.Size(132, 45)
         Me.btnHomeTransfer.TabIndex = 0
         Me.btnHomeTransfer.Text = "Trang chủ"
         Me.btnHomeTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -153,19 +183,6 @@ Partial Class MainForm
         Me.pnlContent.Name = "pnlContent"
         Me.pnlContent.Size = New System.Drawing.Size(822, 370)
         Me.pnlContent.TabIndex = 2
-        '
-        'btnSessionTransfer
-        '
-        Me.btnSessionTransfer.Dock = System.Windows.Forms.DockStyle.Top
-        Me.btnSessionTransfer.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.btnSessionTransfer.Location = New System.Drawing.Point(0, 242)
-        Me.btnSessionTransfer.Margin = New System.Windows.Forms.Padding(2)
-        Me.btnSessionTransfer.Name = "btnSessionTransfer"
-        Me.btnSessionTransfer.Size = New System.Drawing.Size(132, 51)
-        Me.btnSessionTransfer.TabIndex = 5
-        Me.btnSessionTransfer.Text = "Phiên đăng nhập"
-        Me.btnSessionTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnSessionTransfer.UseVisualStyleBackColor = True
         '
         'MainForm
         '
@@ -198,4 +215,5 @@ Partial Class MainForm
     Friend WithEvents pnlContent As Panel
     Friend WithEvents btnSessionTransfer As Button
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents btnLogOut As Button
 End Class

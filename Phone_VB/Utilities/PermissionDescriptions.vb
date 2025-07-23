@@ -9,6 +9,7 @@
         {PermissionEnum.view_roles, "View roles"},
         {PermissionEnum.view_users, "View users"},
         {PermissionEnum.import_stock, "Import stock"},
-        {PermissionEnum.export_stock, "Export stock"}
+        {PermissionEnum.export_stock, "Export stock"},
+        {PermissionEnum.view_sessions, "View sessions"}
     }
 End Module

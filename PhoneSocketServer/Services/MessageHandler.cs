@@ -42,6 +42,7 @@ public class MessageHandler
                 MessageTypes.USER_CONNECTED => await HandleUserConnected(message, sender),
                 MessageTypes.USER_DISCONNECTED => await HandleUserDisconnected(message, sender),
                 MessageTypes.ROLE_PERMISSIONS_CHANGED => await HandleRolePermissionsChanged(message, sender),
+                MessageTypes.USER_ROLE_CHANGED => await HandleUserRoleChanged(message, sender),
                 MessageTypes.USER_FORCE_LOGOUT => await HandleUserForceLogout(message, sender),
                 MessageTypes.GET_ONLINE_USERS => await HandleGetOnlineUsers(message, sender),
                 _ => null
@@ -104,6 +105,43 @@ public class MessageHandler
         if (_tcpSocketServer != null)
         {
             await BroadcastToTcpRoleAsync(roleData.RoleId, message);
+        }
+
+        return null;
+    }
+
+    private async Task<SocketMessage?> HandleUserRoleChanged(SocketMessage message, ConnectedClient? sender)
+    {
+        var roleChangeData = JsonConvert.DeserializeObject<UserRoleChangeData>(message.Data.ToString()!);
+        if (roleChangeData == null) return null;
+
+        _logger.LogInformation("User role changed: UserId={UserId}, NewRoleId={NewRoleId}", 
+            roleChangeData.UserId, roleChangeData.NewRoleId);
+
+        // Find the specific client to notify
+        var targetClient = _clientManager.GetClient(roleChangeData.UserId);
+        if (targetClient != null)
+        {
+            // Update the client's role
+            targetClient.RoleId = roleChangeData.NewRoleId;
+
+            // Send role change message to specific user via WebSocket
+            if (_webSocketServer != null)
+            {
+                await _webSocketServer.SendToUserAsync(roleChangeData.UserId, message);
+            }
+
+            // Send role change message to specific user via TCP
+            if (_tcpSocketServer != null)
+            {
+                await _tcpSocketServer.SendMessageToClientAsync(targetClient, message);
+            }
+
+            _logger.LogInformation("User role change message sent to user {UserId} via both WebSocket and TCP", roleChangeData.UserId);
+        }
+        else
+        {
+            _logger.LogWarning("User {UserId} not found for role change notification", roleChangeData.UserId);
         }
 
         return null;

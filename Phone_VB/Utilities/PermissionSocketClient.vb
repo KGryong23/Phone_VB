@@ -37,13 +37,21 @@ Public Class PermissionSocketClient
         End Get
     End Property
 
+    ' Reset singleton instance để tạo connection mới
+    Public Shared Sub ResetInstance()
+        If _instance IsNot Nothing Then
+            _instance.Disconnect()
+            _instance = Nothing
+        End If
+    End Sub
+
     Public ReadOnly Property IsConnected As Boolean
         Get
             Dim result = _isConnected AndAlso _tcpClient IsNot Nothing AndAlso _tcpClient.Connected
             If Not result Then
                 Debug.WriteLine("IsConnected = False. _isConnected: " + _isConnected.ToString() +
                               ", _tcpClient IsNot Nothing: " + (_tcpClient IsNot Nothing).ToString() +
-                              ", _tcpClient.Connected: " + If(_tcpClient IsNot Nothing, _tcpClient.Connected.ToString(), "null"))
+                              ", _tcpClient.Connected: " + If(_tcpClient IsNot Nothing, _tcpClient.Connected.ToString(), "N/A"))
             End If
             Return result
         End Get
@@ -120,6 +128,23 @@ Public Class PermissionSocketClient
             Debug.WriteLine("Role permission changed notification sent: RoleId=" + roleId.ToString())
         Catch ex As Exception
             Debug.WriteLine("Failed to send role permission changed: " + ex.Message)
+        End Try
+    End Sub
+
+    Public Sub SendUserRoleChangedAsync(userId As Integer, newRoleId As Integer)
+        Try
+            Dim message As New SocketMessage With {
+                .Type = SocketMessageTypes.UserRoleChanged,
+                .Data = New UserRoleChangeData With {
+                    .UserId = userId,
+                    .NewRoleId = newRoleId
+                }
+            }
+
+            SendMessage(message)
+            Debug.WriteLine("User role changed notification sent: UserId=" + userId.ToString() + ", NewRoleId=" + newRoleId.ToString())
+        Catch ex As Exception
+            Debug.WriteLine("Failed to send user role changed: " + ex.Message)
         End Try
     End Sub
 
@@ -298,6 +323,9 @@ Public Class PermissionSocketClient
                 Case SocketMessageTypes.RolePermissionChanged
                     Debug.WriteLine("Routing to HandleRolePermissionsChanged")
                     HandleRolePermissionsChanged(message)
+                Case SocketMessageTypes.UserRoleChanged
+                    Debug.WriteLine("Routing to HandleUserRoleChanged")
+                    HandleUserRoleChanged(message)
                 Case SocketMessageTypes.ForceLogout
                     Debug.WriteLine("Routing to HandleUserForceLogout")
                     HandleUserForceLogout(message)
@@ -385,6 +413,54 @@ Public Class PermissionSocketClient
         Catch ex As Exception
             Debug.WriteLine("Error handling role permissions changed: " + ex.Message)
             Debug.WriteLine("Stack trace: " + ex.StackTrace)
+        End Try
+    End Sub
+
+    Private Sub HandleUserRoleChanged(message As SocketMessage)
+        Try
+            Debug.WriteLine("HandleUserRoleChanged called")
+
+            Dim userId As Integer = 0
+            Dim newRoleId As Integer = 0
+
+            ' Extract data
+            If TypeOf message.Data Is Dictionary(Of String, Object) Then
+                Dim dict = DirectCast(message.Data, Dictionary(Of String, Object))
+                If dict.ContainsKey("UserId") Then userId = Convert.ToInt32(dict("UserId"))
+                If dict.ContainsKey("NewRoleId") Then newRoleId = Convert.ToInt32(dict("NewRoleId"))
+            Else
+                Dim json = _serializer.Serialize(message.Data)
+                Dim roleChangeData = _serializer.Deserialize(Of UserRoleChangeData)(json)
+                userId = roleChangeData.UserId
+                newRoleId = roleChangeData.NewRoleId
+            End If
+
+            Debug.WriteLine("UserRoleChanged: UserId=" + userId.ToString() + ", NewRoleId=" + newRoleId.ToString())
+
+            ' Kiểm tra nếu user hiện tại bị thay đổi role
+            If _currentUserId.HasValue AndAlso _currentUserId.Value = userId Then
+                Debug.WriteLine("Current user role changed! Updating...")
+
+                ' Cập nhật current role ID và CurrentUser
+                _currentRoleId = newRoleId
+                CurrentUser.UpdateRole(newRoleId)
+
+                ' Refresh permissions từ database
+                RefreshCurrentUserPermissions()
+
+                ' Trigger UI update
+                Dim mainForm = GetMainForm()
+                If mainForm IsNot Nothing Then
+                    If mainForm.InvokeRequired Then
+                        Dim handler As New PermissionEventHandler(Sub(id As Integer) RaiseEvent PermissionsChanged(id))
+                        mainForm.Invoke(handler, newRoleId)
+                    Else
+                        RaiseEvent PermissionsChanged(newRoleId)
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            Debug.WriteLine("Error handling user role changed: " + ex.Message)
         End Try
     End Sub
 

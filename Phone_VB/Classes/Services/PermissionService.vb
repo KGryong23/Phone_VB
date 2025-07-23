@@ -2,11 +2,9 @@ Public Class PermissionService
     Implements IPermissionService
 
     Private ReadOnly permissionRepo As IPermissionRepository
-    Private ReadOnly socketClient As PermissionSocketClient
 
     Public Sub New(permissionRepo As IPermissionRepository)
         Me.permissionRepo = permissionRepo
-        Me.socketClient = PermissionSocketClient.Instance
     End Sub
 
     Public Function GetPagedByRole(roleId As Integer, query As BaseQuery) As PagedResult(Of PermissionDto) Implements IPermissionService.GetPagedByRole
@@ -22,15 +20,13 @@ Public Class PermissionService
         If result Then
             Try
                 Debug.WriteLine("About to send socket notification for role: " + roleId.ToString())
-                socketClient.CheckConnectionStatus()
-                
-                ' Test server echo first
-                socketClient.TestServerEcho()
-                
-                ' Then send the actual permission changed message
-                socketClient.SendRolePermissionChangedAsync(roleId)
+
+                Dim socketClient = PermissionSocketClient.Instance
+                If socketClient IsNot Nothing Then
+                    socketClient.SendRolePermissionChangedAsync(roleId)
+                End If
             Catch ex As Exception
-                Debug.WriteLine($"Failed to send socket notification: {ex.Message}")
+                Debug.WriteLine("Failed to send socket notification: " + ex.Message)
             End Try
         End If
 
@@ -43,9 +39,12 @@ Public Class PermissionService
         ' Gửi thông báo socket nếu thành công
         If result Then
             Try
-                socketClient.SendRolePermissionChangedAsync(roleId)
+                Dim socketClient = PermissionSocketClient.Instance
+                If socketClient IsNot Nothing Then
+                    socketClient.SendRolePermissionChangedAsync(roleId)
+                End If
             Catch ex As Exception
-                Debug.WriteLine($"Failed to send socket notification: {ex.Message}")
+                Debug.WriteLine("Failed to send socket notification: " + ex.Message)
             End Try
         End If
 

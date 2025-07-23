@@ -86,6 +86,9 @@
             Throw New ArgumentException("User not found")
         End If
 
+        ' Lưu role cũ để so sánh
+        Dim oldRoleId As Integer = existingUser.RoleId
+
         existingUser.Username = request.Username
         If String.IsNullOrEmpty(request.Password) Then
             Throw New ArgumentException("Password cannot be empty")
@@ -101,6 +104,20 @@
         Dim success = userRepo.Update(existingUser)
         If Not success Then
             Throw New Exception("Failed to update user")
+        End If
+
+        ' Kiểm tra nếu role thay đổi thì gửi thông báo cập nhật quyền
+        If oldRoleId <> request.RoleId Then
+            Try
+                Dim socketClient = PermissionSocketClient.Instance
+                If socketClient IsNot Nothing Then
+                    socketClient.SendUserRoleChangedAsync(request.Id, request.RoleId)
+                    Debug.WriteLine("Sent user role change notification: UserId=" + request.Id.ToString() + ", OldRoleId=" + oldRoleId.ToString() + ", NewRoleId=" + request.RoleId.ToString())
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("Failed to send user role change notification: " + ex.Message)
+                ' Không throw exception vì việc cập nhật user đã thành công
+            End Try
         End If
 
         Return MapToUserDto(existingUser)

@@ -32,15 +32,27 @@
             Dim permissionNames = New HashSet(Of String)(permissions.Select(Function(p) p.Name))
             CurrentUser.SetUser(user.Id, user.Username, user.RoleId, permissionNames)
 
-            ' Mở PhoneForm trực tiếp
-            Using mainForm As New MainForm()
-                Hide()
-                mainForm.ShowDialog()
-                Close()
-            End Using
+            ' Reset socket client instance để tạo connection mới
+            PermissionSocketClient.ResetInstance()
+
+            ' Ẩn LoginForm và mở MainForm
+            Me.Hide()
+            Dim mainForm As New MainForm()
+            mainForm.Show()
+
         Catch ex As Exception
             Debug.WriteLine("Login error: " & ex.Message)
             MessageBox.Show("Đăng nhập thất bại: " & ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    ' Reset form về trạng thái ban đầu khi logout
+    Public Sub ResetForm()
+        txtUsername.Text = ""
+        txtPassword.Text = ""
+        txtUsername.Focus()
+        
+        ' Reset socket client instance để chuẩn bị cho login mới
+        PermissionSocketClient.ResetInstance()
     End Sub
 End Class

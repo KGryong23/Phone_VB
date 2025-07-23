@@ -24,8 +24,8 @@ Partial Class HomeForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.LabelWelcome = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'ContextMenuStrip1
@@ -34,33 +34,33 @@ Partial Class HomeForm
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
         '
-        'TextBox1
+        'LabelWelcome
         '
-        Me.TextBox1.BackColor = System.Drawing.SystemColors.Info
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 25.0!)
-        Me.TextBox1.Location = New System.Drawing.Point(28, 105)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(742, 179)
-        Me.TextBox1.TabIndex = 6
-        Me.TextBox1.Text = "Welcome"
-        Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.LabelWelcome.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.LabelWelcome.Font = New System.Drawing.Font("Segoe UI", 32.0!, System.Drawing.FontStyle.Bold)
+        Me.LabelWelcome.ForeColor = System.Drawing.Color.DarkSlateBlue
+        Me.LabelWelcome.Location = New System.Drawing.Point(110, 89)
+        Me.LabelWelcome.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelWelcome.Name = "LabelWelcome"
+        Me.LabelWelcome.Size = New System.Drawing.Size(374, 161)
+        Me.LabelWelcome.TabIndex = 0
+        Me.LabelWelcome.Text = "Welcome!"
+        Me.LabelWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'HomeForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.TextBox1)
+        Me.ClientSize = New System.Drawing.Size(600, 366)
+        Me.Controls.Add(Me.LabelWelcome)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "HomeForm"
         Me.Text = "Trang chủ"
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
-    Friend WithEvents TextBox1 As TextBox
     Friend WithEvents ColorDialog1 As ColorDialog
+    Friend WithEvents LabelWelcome As Label
 End Class

@@ -51,4 +51,9 @@
     Public Shared Sub RefreshPermissions(newPermissions As HashSet(Of String))
         _permissionNames = newPermissions
     End Sub
+
+    ' Cập nhật role ID khi có thay đổi từ socket
+    Public Shared Sub UpdateRole(newRoleId As Integer)
+        _roleId = newRoleId
+    End Sub
 End Class
